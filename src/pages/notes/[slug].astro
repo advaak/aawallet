@@ -5,6 +5,7 @@ import KeyNumber from "../../components/KeyNumber.astro";
 import Assumption from "../../components/Assumption.astro";
 import Callout from "../../components/Callout.astro";
 import WrongTurn from "../../components/WrongTurn.astro";
+import Chart from "../../components/Chart.astro";
 
 export async function getStaticPaths() {
   const notes = await getCollection("notes");
@@ -17,7 +18,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const components = { KeyNumber, Assumption, Callout, WrongTurn };
+const components = { KeyNumber, Assumption, Callout, WrongTurn, Chart };
 ---
 
 <NoteLayout entry={entry}>

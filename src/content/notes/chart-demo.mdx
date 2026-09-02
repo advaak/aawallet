@@ -1,0 +1,43 @@
+---
+title: "Chart component — build-time SVG demo"
+publishedAt: 2026-09-02
+author: placeholder
+desk: "either"
+dataFile: "/data/chart-demo.csv"
+tags: ["meta", "charts"]
+draft: true
+---
+
+This note exists to exercise the `Chart` component (SPEC §3 Phase 3). **The data
+below is illustrative and synthetic — it is not a real company, product, or
+market series.** Real notes replace it with a cited CSV.
+
+## One chart, one question
+
+Question: does the series flatten in the second year?
+
+<Chart
+  src="/data/chart-demo.csv"
+  type="line"
+  x="date"
+  y="value"
+  caption="Illustrative series (synthetic). Monthly, Jan 2024 – Dec 2025. Values are made up for this demo."
+/>
+
+Answer: yes — the month-over-month change shrinks from roughly +12 early on to
+about +2 by the end. The curve is a plain S-curve with no noise added.
+
+The chart is rendered to inline SVG at build time with Observable Plot; no
+charting code is shipped to the browser. Axis, gridline, and series colors are
+CSS custom properties, so it re-themes in dark mode with the rest of the site.
+The source CSV is linked under the caption.
+
+## Same data, as an area
+
+<Chart
+  src="/data/chart-demo.csv"
+  type="area"
+  x="date"
+  y="value"
+  caption="The same synthetic series, drawn as an area."
+/>

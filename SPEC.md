@@ -14,6 +14,7 @@ Implementation contract. The PRD says *what and why*; this says *how*. Read both
 | Content | MDX | `@astrojs/mdx` |
 | Styling | Tailwind | via `@tailwindcss/vite` |
 | Charts | `@observablehq/plot` | Build-time only. Renders to static SVG. Zero client JS. |
+| Chart DOM | `linkedom` | DOM shim so Plot can render in Node. Approved 2026-09-02 (Plot has no headless renderer). |
 | Data parsing | `csv-parse` | Reads CSVs at build time |
 | Feed | `@astrojs/rss` | |
 | Sitemap | `@astrojs/sitemap` | |

@@ -18,6 +18,7 @@
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^5.13.0",
     "csv-parse": "^5.6.0",
+    "linkedom": "^0.18.13",
     "tailwindcss": "^4.1.0"
   },
   "devDependencies": {
