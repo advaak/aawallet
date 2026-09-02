@@ -4,7 +4,7 @@ Rules for working in this repo. Read `SPEC.md` before making structural changes.
 
 ## What this is
 
-**Coverage Initiated** (aawallet.com) — a static publication of stock pitches and worked finance/consulting cases, written by two undergraduates. Two desks: **finance** and **consulting**. Every post carries a named byline; author pages are the URLs that go on resumes.
+**AAwallet** (aawallet.com) — a static publication of stock pitches and worked finance/consulting cases, written by two undergraduates. Two desks: **finance** and **consulting**. Every post carries a named byline; author pages are the URLs that go on resumes.
 
 The site exists to demonstrate rigorous thinking. Everything below serves that.
 

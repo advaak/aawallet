@@ -1,0 +1,129 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+
+const authors = (await getCollection("authors")).sort((a, b) =>
+  a.data.desk.localeCompare(b.data.desk),
+);
+---
+
+<BaseLayout
+  title="About — AAwallet"
+  description="What AAwallet is, what it isn't, and who writes it."
+>
+  <div class="container stack-lg about measure">
+    <header class="stack">
+      <p class="kicker">About</p>
+      <h1>What this is</h1>
+      <p>
+        AAwallet is a static publication of stock pitches and worked
+        finance &amp; consulting interview cases, written by two undergraduates.
+        It exists to demonstrate rigorous thinking — not to give advice, and not
+        to track performance.
+      </p>
+    </header>
+
+    <section class="stack" aria-label="What it is and isn't">
+      <div>
+        <h2>What it is</h2>
+        <ul>
+          <li>
+            Pitches with a thesis in three bullets, explicit kill criteria, every
+            valuation assumption stated and sourced, and a real model linked.
+          </li>
+          <li>
+            Cases stated the way an interviewer states them, then solved in the
+            open — arithmetic shown, and at least one wrong turn kept in.
+          </li>
+          <li>
+            A <a href="/scorecard">scorecard</a> that tracks whether each pitch's
+            thesis still holds.
+          </li>
+          <li>
+            Named bylines on every post. Each author's page (linked below) is
+            meant to be linked from a resume.
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>What it isn't</h2>
+        <ul>
+          <li>
+            Not investment advice, and not a recommendation to buy or sell any
+            security. See the <a href="/disclaimer">disclaimer</a>.
+          </li>
+          <li>
+            Not a track record. There is deliberately no returns column — the
+            scorecard tracks thesis status, not profit and loss.
+          </li>
+          <li>
+            Not a claim of professional credentials. The authors are students.
+          </li>
+          <li>
+            No comments, no accounts, no paywall, no live price data, no search.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stack" aria-label="Who writes it">
+      <h2>Who writes it</h2>
+      {
+        authors.length === 0 ? (
+          <p class="empty">Author profiles coming soon.</p>
+        ) : (
+          <div class="cards">
+            {authors.map((author) => (
+              <AuthorCard
+                name={author.data.name}
+                slug={author.id}
+                role={author.data.role}
+                bio={author.data.bio}
+                desk={author.data.desk}
+                links={author.data.links}
+              />
+            ))}
+          </div>
+        )
+      }
+    </section>
+  </div>
+
+  <style>
+    .about {
+      padding-block: 2.5rem 1rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+    h1 {
+      font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.6rem);
+    }
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    p,
+    li {
+      color: var(--ink-2);
+    }
+    ul {
+      padding-left: 1.2rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .cards {
+      display: grid;
+      gap: 1rem;
+    }
+    .empty {
+      color: var(--ink-3);
+    }
+  </style>
+</BaseLayout>

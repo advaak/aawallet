@@ -1,0 +1,105 @@
+---
+import type { PostItem } from "../lib/posts";
+import Byline from "./Byline.astro";
+import StatusBadge from "./StatusBadge.astro";
+
+interface Props {
+  item: PostItem;
+}
+
+const { item } = Astro.props;
+
+const deskVar =
+  item.desk === "finance"
+    ? "var(--accent)"
+    : item.desk === "consulting"
+      ? "var(--accent-2)"
+      : "var(--ink-2)";
+
+const typeLabel =
+  item.type === "pitch" ? "Pitch" : item.type === "case" ? "Case" : "Note";
+---
+
+<article class="row" style={`--desk: ${deskVar}`}>
+  <p class="row-meta">
+    <span class="type">{typeLabel}</span>
+    {item.ticker && <span class="tkr">{item.ticker}</span>}
+    {
+      item.direction && (
+        <span class="dir" data-dir={item.direction}>
+          {item.direction}
+        </span>
+      )
+    }
+    {item.caseType && <span class="ctype">{item.caseType.replace(/-/g, " ")}</span>}
+    {item.status && <StatusBadge status={item.status} />}
+  </p>
+  <h3 class="row-title"><a href={item.href}>{item.title}</a></h3>
+  <Byline
+    authorName={item.authorName}
+    authorSlug={item.authorId}
+    desk={item.desk}
+    date={item.publishedAt}
+  />
+</article>
+
+<style>
+  .row {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row:first-child {
+    padding-top: 0;
+  }
+  .row-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+  .type {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--desk, var(--ink-2));
+  }
+  .tkr {
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+  }
+  .dir {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    color: var(--ink-2);
+  }
+  .dir[data-dir="long"] {
+    color: var(--good);
+    border-color: var(--good);
+  }
+  .dir[data-dir="short"] {
+    color: var(--crit);
+    border-color: var(--crit);
+  }
+  .ctype {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+  }
+  .row-title {
+    font-size: 1.25rem;
+    margin-block: 0.35rem 0;
+  }
+  .row-title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .row-title a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--desk, var(--rule-strong));
+  }
+</style>

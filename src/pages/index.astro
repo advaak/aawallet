@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostRow from "../components/PostRow.astro";
+import { getAllPosts } from "../lib/posts";
+
+const latest = (await getAllPosts()).slice(0, 6);
+---
+
+<BaseLayout
+  title="AAwallet"
+  description="Stock pitches and worked finance & consulting cases, written by two undergraduates. Every pitch states its kill criteria; every case keeps the wrong turn in."
+>
+  <div class="container home stack-lg">
+    <section class="start measure" aria-label="Start here">
+      <p class="kicker">Start here</p>
+      <h1>Analysis you can check.</h1>
+      <p>
+        AAwallet publishes stock pitches and worked finance &amp; consulting
+        interview cases. Two desks, two authors, one standard: show the
+        arithmetic, state the assumptions, and say what would prove the thesis
+        wrong.
+      </p>
+      <ul class="entry-points">
+        <li>
+          <a href="/pitches">Pitches</a> — each with a thesis in three bullets,
+          explicit kill criteria, and a linked model.
+        </li>
+        <li>
+          <a href="/scorecard">The scorecard</a> — every pitch and its current
+          thesis status. No returns column, on purpose.
+        </li>
+        <li>
+          <a href="/finance">Finance desk</a> and
+          <a href="/consulting">Consulting desk</a> — cases stated cold, solved
+          in the open, wrong turns kept in.
+        </li>
+        <li><a href="/about">About</a> — what this is, and what it isn't.</li>
+      </ul>
+    </section>
+
+    <section class="latest measure" aria-label="Latest posts">
+      <p class="kicker">Latest</p>
+      {
+        latest.length === 0 ? (
+          <p class="empty">
+            No posts published yet. Draft posts are visible in local development
+            only.
+          </p>
+        ) : (
+          <div class="rows">
+            {latest.map((item) => (
+              <PostRow item={item} />
+            ))}
+          </div>
+        )
+      }
+    </section>
+  </div>
+
+  <style>
+    .home {
+      padding-block: 3rem 1rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+    .start h1 {
+      font-size: clamp(2rem, 1.4rem + 3vw, 3rem);
+      margin-block: 0.5rem 0.75rem;
+    }
+    .start p {
+      color: var(--ink-2);
+    }
+    .entry-points {
+      margin-top: 1.5rem;
+      padding-left: 1.2rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .entry-points li {
+      color: var(--ink-2);
+    }
+    .latest .kicker {
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--rule-strong);
+      display: block;
+    }
+    .rows {
+      margin-top: 0.5rem;
+    }
+    .empty {
+      margin-top: 1rem;
+      color: var(--ink-3);
+    }
+  </style>
+</BaseLayout>

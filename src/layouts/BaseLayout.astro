@@ -27,13 +27,19 @@ const nav = [
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="AAwallet"
+      href="/rss.xml"
+    />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="site-header">
       <div class="wrap">
-        <a class="wordmark" href="/">Coverage&nbsp;Initiated</a>
+        <a class="wordmark" href="/">AAwallet</a>
         <nav aria-label="Primary">
           {nav.map((n) => <a href={n.href}>{n.label}</a>)}
         </nav>
@@ -52,7 +58,7 @@ const nav = [
           on every pitch. <a href="/disclaimer">See full disclaimer</a>.
         </p>
         <p class="colophon">
-          <span class="tnum">&copy;&nbsp;{year}</span> Coverage Initiated
+          <span class="tnum">&copy;&nbsp;{year}</span> AAwallet
         </p>
       </div>
     </footer>

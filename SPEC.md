@@ -1,4 +1,4 @@
-# Build Spec — Coverage Initiated (aawallet.com)
+# Build Spec — AAwallet (aawallet.com)
 
 Implementation contract. The PRD says *what and why*; this says *how*. Read both before running anything.
 

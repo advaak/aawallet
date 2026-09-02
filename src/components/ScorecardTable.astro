@@ -1,0 +1,194 @@
+---
+import type { ScorecardRow } from "../lib/scorecard";
+import StatusBadge from "./StatusBadge.astro";
+
+interface Props {
+  rows: ScorecardRow[];
+}
+
+const { rows } = Astro.props;
+
+function iso(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+function money(n: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(
+      n,
+    );
+  } catch {
+    return `${n.toFixed(2)} ${currency}`;
+  }
+}
+---
+
+{
+  rows.length === 0 ? (
+    <p class="empty">No published pitches yet.</p>
+  ) : (
+    <div class="scorecard" data-scorecard>
+      <table>
+        <thead>
+          <tr>
+            <th data-key="ticker" scope="col">
+              Ticker
+            </th>
+            <th data-key="direction" scope="col">
+              Direction
+            </th>
+            <th data-key="published" data-type="date" aria-sort="descending" scope="col">
+              Published
+            </th>
+            <th data-key="price" data-type="num" scope="col" class="num">
+              Price at publication
+            </th>
+            <th data-key="status" scope="col">
+              Status
+            </th>
+            <th data-key="updated" data-type="date" scope="col">
+              Last update
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <td data-ticker={r.ticker}>
+                <a href={`/pitches/${r.slug}`}>{r.ticker}</a>
+              </td>
+              <td data-direction={r.direction}>{r.direction}</td>
+              <td data-published={iso(r.publishedAt)}>
+                <time datetime={iso(r.publishedAt)}>{iso(r.publishedAt)}</time>
+              </td>
+              <td data-price={r.priceAtPublication} class="num">
+                {money(r.priceAtPublication, r.currency)}
+              </td>
+              <td data-status={r.status}>
+                <StatusBadge status={r.status} />
+              </td>
+              <td data-updated={iso(r.lastUpdate)}>
+                <time datetime={iso(r.lastUpdate)}>{iso(r.lastUpdate)}</time>
+                {r.updateCount > 0 && (
+                  <span class="count"> ({r.updateCount})</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style>
+  .empty {
+    color: var(--ink-3);
+  }
+  .scorecard {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  th {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    border-bottom-color: var(--rule-strong);
+    cursor: pointer;
+    user-select: none;
+  }
+  th:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  th[aria-sort="ascending"]::after {
+    content: " ▲";
+  }
+  th[aria-sort="descending"]::after {
+    content: " ▼";
+  }
+  td a {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .num {
+    text-align: right;
+  }
+  .count {
+    color: var(--ink-3);
+  }
+  tbody tr:hover {
+    background: var(--sunk);
+  }
+</style>
+
+<script>
+  // Framework-free column sort (SPEC §4 sanctions "a tiny inline sort script").
+  // The table is server-sorted by Published desc; this only re-orders rows.
+  document.querySelectorAll<HTMLElement>("[data-scorecard]").forEach((root) => {
+    const table = root.querySelector("table");
+    const tbody = table?.querySelector("tbody");
+    const head = table?.tHead;
+    if (!table || !tbody || !head) return;
+    const ths = Array.from(head.rows[0].cells);
+
+    ths.forEach((th, index) => {
+      const key = th.dataset.key;
+      if (!key) return;
+      const type = th.dataset.type;
+
+      const sort = () => {
+        const next =
+          th.getAttribute("aria-sort") === "ascending"
+            ? "descending"
+            : "ascending";
+        ths.forEach((o) => o.removeAttribute("aria-sort"));
+        th.setAttribute("aria-sort", next);
+
+        const rows = Array.from(tbody.rows);
+        rows.sort((a, b) => {
+          const ca = a.cells[index];
+          const cb = b.cells[index];
+          let x: string | number =
+            ca.dataset[key] ?? ca.textContent?.trim() ?? "";
+          let y: string | number =
+            cb.dataset[key] ?? cb.textContent?.trim() ?? "";
+          if (type === "num") {
+            x = parseFloat(x as string);
+            y = parseFloat(y as string);
+          } else if (type === "date") {
+            x = Date.parse(x as string);
+            y = Date.parse(y as string);
+          }
+          const cmp = x < y ? -1 : x > y ? 1 : 0;
+          return next === "ascending" ? cmp : -cmp;
+        });
+        rows.forEach((r) => tbody.appendChild(r));
+      };
+
+      th.setAttribute("tabindex", "0");
+      th.setAttribute("role", "button");
+      th.addEventListener("click", sort);
+      th.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          sort();
+        }
+      });
+    });
+  });
+</script>

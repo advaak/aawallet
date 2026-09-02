@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostRow from "../../components/PostRow.astro";
+import { getNoteItems } from "../../lib/posts";
+
+const notes = await getNoteItems();
+---
+
+<BaseLayout
+  title="Notes — AAwallet"
+  description="Short data notes: one chart, one question, answered. The source CSV is published alongside each."
+>
+  <div class="container stack measure page">
+    <header>
+      <p class="kicker">Notes</p>
+      <h1>Notes</h1>
+      <p class="lede">
+        One chart, one question, one answer. The underlying data is published
+        with every note.
+      </p>
+    </header>
+
+    {
+      notes.length === 0 ? (
+        <p class="empty">
+          No notes published yet. Drafts show in local development only.
+        </p>
+      ) : (
+        <div>
+          {notes.map((item) => (
+            <PostRow item={item} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <style>
+    .page {
+      padding-block: 2.5rem 1rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.4rem);
+      margin-block: 0.35rem 0.5rem;
+    }
+    .lede {
+      color: var(--ink-2);
+    }
+    .empty {
+      color: var(--ink-3);
+    }
+  </style>
+</BaseLayout>

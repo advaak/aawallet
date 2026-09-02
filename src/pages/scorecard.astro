@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ScorecardTable from "../components/ScorecardTable.astro";
+import { getScorecardRows } from "../lib/scorecard";
+
+const rows = await getScorecardRows();
+---
+
+<BaseLayout
+  title="Scorecard — AAwallet"
+  description="Every pitch and its current thesis status. Derived from pitch frontmatter. No returns column, on purpose."
+>
+  <div class="container scorecard-page">
+    <header class="measure">
+      <p class="kicker">Scorecard</p>
+      <h1>Scorecard</h1>
+      <p class="lede">
+        Every pitch, with the price stamped at publication and the current status
+        of its thesis. This table is built from each pitch's own frontmatter —
+        there is no separate data file. There is deliberately
+        <strong>no returns column</strong>: the scorecard tracks whether the
+        reasoning still holds, not profit and loss.
+      </p>
+      <p class="legend">
+        <span class="k" data-status="intact">intact</span> — the thesis still
+        holds.
+        <span class="k" data-status="weakened">weakened</span> — part of it is in
+        question.
+        <span class="k" data-status="broken">broken</span> — a kill criterion was
+        met.
+      </p>
+    </header>
+
+    <div class="table-wrap">
+      <ScorecardTable rows={rows} />
+    </div>
+  </div>
+
+  <style>
+    .scorecard-page {
+      padding-block: 2.5rem 2rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.4rem);
+      margin-block: 0.35rem 0.5rem;
+    }
+    .lede {
+      color: var(--ink-2);
+    }
+    .legend {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--ink-3);
+    }
+    .legend .k {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 0.5rem;
+    }
+    .legend .k:first-child {
+      margin-left: 0;
+    }
+    .legend .k[data-status="intact"] {
+      color: var(--good);
+    }
+    .legend .k[data-status="weakened"] {
+      color: var(--warn);
+    }
+    .legend .k[data-status="broken"] {
+      color: var(--crit);
+    }
+    .table-wrap {
+      margin-top: 2rem;
+    }
+  </style>
+</BaseLayout>
