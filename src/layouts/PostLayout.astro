@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import EmailSignup from "../components/EmailSignup.astro";
 
 interface Props {
   title: string;
@@ -38,6 +39,8 @@ const deskVar =
       <footer class="post-foot">
         <slot name="foot" />
       </footer>
+
+      <EmailSignup variant="post" />
     </div>
   </article>
 

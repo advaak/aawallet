@@ -1,0 +1,115 @@
+---
+/**
+ * Buttondown embed — plain HTML form POST, no JS SDK (SPEC §1, §8).
+ * Set PUBLIC_BUTTONDOWN_USERNAME (in .env locally, and in the Vercel project
+ * settings) to activate it. Renders nothing until then.
+ */
+interface Props {
+  variant?: "footer" | "post";
+}
+
+const { variant = "footer" } = Astro.props;
+const username = import.meta.env.PUBLIC_BUTTONDOWN_USERNAME;
+const action = username
+  ? `https://buttondown.com/api/emails/embed-subscribe/${username}`
+  : null;
+---
+
+{
+  action && (
+    <section class="signup" data-variant={variant} aria-label="Newsletter signup">
+      <p class="kicker">Get new posts by email</p>
+      <form action={action} method="post" target="_blank" class="signup-form">
+        <label class="visually-hidden" for={`bd-email-${variant}`}>
+          Email address
+        </label>
+        <input
+          id={`bd-email-${variant}`}
+          type="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          required
+        />
+        <input type="hidden" name="embed" value="1" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="fineprint">
+        No spam. One email per post. Unsubscribe any time.
+      </p>
+    </section>
+  )
+}
+
+<style>
+  .signup {
+    max-width: var(--measure);
+  }
+  .signup[data-variant="footer"] {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .signup[data-variant="post"] {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    margin-bottom: 0.6rem;
+  }
+  .signup-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  input[type="email"] {
+    flex: 1 1 16rem;
+    min-width: 0;
+    font: inherit;
+    font-size: 0.9375rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    padding: 0.5rem 0.65rem;
+  }
+  input[type="email"]::placeholder {
+    color: var(--ink-3);
+  }
+  button {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--surface);
+    background: var(--desk, var(--accent));
+    border: 1px solid var(--desk, var(--accent));
+    border-radius: 2px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  button:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .fineprint {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>
