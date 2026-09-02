@@ -1,0 +1,74 @@
+/*
+ * Design tokens — SPEC.md §6.
+ * Every color on the site is a token defined here. A hex value anywhere else is a bug.
+ * Structure: bare :root defines the full light palette; dark is a full redefinition
+ * of the same names, both under prefers-color-scheme and under [data-theme="dark"]
+ * so an explicit toggle always wins.
+ */
+
+:root {
+  /* surfaces */
+  --paper: #FAFBFC;
+  --surface: #FFFFFF;
+  --sunk: #F0F4F7;
+
+  /* ink */
+  --ink: #131A21;
+  --ink-2: #3C4956;
+  --ink-3: #6E7C89;
+
+  /* rules */
+  --rule: #DBE3EA;
+  --rule-strong: #B7C4D0;
+
+  /* desk color — structural, not decorative */
+  --accent: #1B5E8C;      /* finance desk */
+  --accent-2: #3E8C7A;    /* consulting desk */
+
+  /* status semantics */
+  --good: #1F6B4F;
+  --warn: #8F6013;
+  --crit: #97302F;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E141A;
+    --surface: #141D25;
+    --sunk: #0A1015;
+
+    --ink: #E7EDF2;
+    --ink-2: #B2C0CC;
+    --ink-3: #7C8B98;
+
+    --rule: #26313B;
+    --rule-strong: #3B4A57;
+
+    --accent: #5AA9D6;
+    --accent-2: #6FBFA9;
+
+    --good: #4FB08A;
+    --warn: #D19A4A;
+    --crit: #D96B68;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0E141A;
+  --surface: #141D25;
+  --sunk: #0A1015;
+
+  --ink: #E7EDF2;
+  --ink-2: #B2C0CC;
+  --ink-3: #7C8B98;
+
+  --rule: #26313B;
+  --rule-strong: #3B4A57;
+
+  --accent: #5AA9D6;
+  --accent-2: #6FBFA9;
+
+  --good: #4FB08A;
+  --warn: #D19A4A;
+  --crit: #D96B68;
+}

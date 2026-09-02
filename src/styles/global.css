@@ -1,0 +1,8 @@
+/*
+ * Global stylesheet entry point.
+ * Tailwind v4 is loaded here via @tailwindcss/vite (no config file, no PostCSS).
+ * Tokens are imported first so utilities and component styles can reference them.
+ * Real typography / layout rules land in Phase 1.
+ */
+@import "./tokens.css";
+@import "tailwindcss";
