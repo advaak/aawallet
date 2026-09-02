@@ -1,0 +1,60 @@
+---
+interface Props {
+  prompt: string;
+  timeToSolve: number;
+  difficulty: "warmup" | "standard" | "hard";
+  caseType: string;
+}
+
+const { prompt, timeToSolve, difficulty, caseType } = Astro.props;
+const caseTypeLabel = caseType.replace(/-/g, " ");
+---
+
+<section class="prompt" aria-label="The prompt">
+  <div class="meta">
+    <span class="kicker">The prompt</span>
+    <span class="chip">{caseTypeLabel}</span>
+    <span class="chip">{difficulty}</span>
+    <span class="chip tnum">{timeToSolve} min</span>
+  </div>
+  <p class="body">{prompt}</p>
+</section>
+
+<style>
+  .prompt {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--desk, var(--accent));
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    border-radius: 2px;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    margin-right: 0.25rem;
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+  }
+  .body {
+    font-size: 1.0625rem;
+    color: var(--ink);
+  }
+</style>

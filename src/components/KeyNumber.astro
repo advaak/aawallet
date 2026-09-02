@@ -1,0 +1,43 @@
+---
+interface Props {
+  value: string;
+  label?: string;
+  sub?: string;
+}
+
+const { value, label, sub } = Astro.props;
+---
+
+<figure class="key-number">
+  <div class="kn-value tnum">{value}</div>
+  {label && <figcaption class="kn-label">{label}</figcaption>}
+  {sub && <p class="kn-sub">{sub}</p>}
+</figure>
+
+<style>
+  .key-number {
+    border-left: 2px solid var(--desk, var(--rule-strong));
+    padding-left: 0.9rem;
+    margin-block: var(--rhythm);
+  }
+  .kn-value {
+    font-family: var(--font-mono);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .kn-label {
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-3);
+  }
+  .kn-sub {
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+</style>

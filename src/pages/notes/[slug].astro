@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from "astro:content";
+import NoteLayout from "../../layouts/NoteLayout.astro";
+import KeyNumber from "../../components/KeyNumber.astro";
+import Assumption from "../../components/Assumption.astro";
+import Callout from "../../components/Callout.astro";
+import WrongTurn from "../../components/WrongTurn.astro";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("notes");
+  return notes.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const components = { KeyNumber, Assumption, Callout, WrongTurn };
+---
+
+<NoteLayout entry={entry}>
+  <Content components={components} />
+</NoteLayout>

@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from "astro:content";
+import CaseLayout from "../../layouts/CaseLayout.astro";
+import KeyNumber from "../../components/KeyNumber.astro";
+import Assumption from "../../components/Assumption.astro";
+import Callout from "../../components/Callout.astro";
+import WrongTurn from "../../components/WrongTurn.astro";
+
+export async function getStaticPaths() {
+  const cases = await getCollection("cases");
+  return cases
+    .filter((c) => c.data.desk === "consulting")
+    .map((entry) => ({
+      params: { slug: entry.id },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const components = { KeyNumber, Assumption, Callout, WrongTurn };
+---
+
+<CaseLayout entry={entry}>
+  <Content components={components} />
+</CaseLayout>

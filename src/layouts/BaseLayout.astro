@@ -1,0 +1,146 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const year = new Date().getFullYear();
+
+const nav = [
+  { href: "/pitches", label: "Pitches" },
+  { href: "/finance", label: "Finance" },
+  { href: "/consulting", label: "Consulting" },
+  { href: "/notes", label: "Notes" },
+  { href: "/scorecard", label: "Scorecard" },
+  { href: "/about", label: "About" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="wordmark" href="/">Coverage&nbsp;Initiated</a>
+        <nav aria-label="Primary">
+          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="legal">
+          Educational content by undergraduate students. Not investment advice,
+          not a recommendation to buy or sell any security. Positions disclosed
+          on every pitch. <a href="/disclaimer">See full disclaimer</a>.
+        </p>
+        <p class="colophon">
+          <span class="tnum">&copy;&nbsp;{year}</span> Coverage Initiated
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .wrap {
+        max-width: var(--page-max);
+        margin-inline: auto;
+        padding-inline: var(--page-pad);
+      }
+
+      .skip {
+        position: absolute;
+        left: -9999px;
+        z-index: 10;
+      }
+      .skip:focus {
+        left: var(--page-pad);
+        top: 0.5rem;
+        background: var(--surface);
+        color: var(--ink);
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--rule-strong);
+        border-radius: 2px;
+      }
+
+      .site-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--rule);
+      }
+      .site-header .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem 1.5rem;
+        padding-block: 1rem;
+      }
+      .wordmark {
+        font-family: var(--font-serif);
+        font-weight: 600;
+        font-size: 1.125rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .site-header nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 1.25rem;
+      }
+      .site-header nav a {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ink-2);
+        text-decoration: none;
+      }
+      .site-header nav a:hover {
+        color: var(--ink);
+      }
+
+      main {
+        min-height: 60vh;
+      }
+
+      .site-footer {
+        margin-top: 4rem;
+        background: var(--surface);
+        border-top: 1px solid var(--rule);
+      }
+      .site-footer .wrap {
+        padding-block: 2rem;
+      }
+      .legal {
+        max-width: var(--measure);
+        font-size: 0.875rem;
+        color: var(--ink-3);
+      }
+      .legal a {
+        color: var(--ink-2);
+      }
+      .colophon {
+        margin-top: 0.75rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--ink-3);
+      }
+    </style>
+  </body>
+</html>

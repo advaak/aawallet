@@ -1,0 +1,40 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="testing" aria-label="What the interviewer is testing">
+  <p class="kicker">What the interviewer is testing</p>
+  <ul>
+    {items.map((i) => <li>{i}</li>)}
+  </ul>
+</section>
+
+<style>
+  .testing {
+    border: 1px solid var(--rule);
+    background: var(--sunk);
+    padding: 1.1rem 1.4rem;
+    border-radius: 2px;
+  }
+  .kicker {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  ul {
+    padding-left: 1.3rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  li {
+    padding-left: 0.25rem;
+    color: var(--ink-2);
+  }
+</style>

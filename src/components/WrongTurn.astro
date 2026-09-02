@@ -1,0 +1,39 @@
+---
+// The site's signature element: the approach that didn't work, kept in on purpose.
+// Deliberate, not an error state (SPEC §5).
+interface Props {
+  label?: string;
+}
+
+const { label = "Wrong turn" } = Astro.props;
+---
+
+<aside class="wrong-turn" role="note">
+  <p class="wt-label">{label}</p>
+  <div class="wt-body"><slot /></div>
+</aside>
+
+<style>
+  .wrong-turn {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--warn);
+    background: color-mix(in oklab, var(--warn) 7%, var(--surface));
+    padding: 1rem 1.25rem 1.1rem;
+    border-radius: 2px;
+    margin-block: var(--rhythm);
+  }
+  .wt-label {
+    margin-bottom: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--warn);
+  }
+  .wt-body :global(> :first-child) {
+    margin-top: 0;
+  }
+  .wt-body :global(> * + *) {
+    margin-top: var(--rhythm);
+  }
+</style>

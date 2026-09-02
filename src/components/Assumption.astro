@@ -1,0 +1,32 @@
+---
+interface Props {
+  sensitive?: boolean;
+}
+
+const { sensitive = false } = Astro.props;
+---
+
+<span class:list={["assumption", { sensitive }]}>
+  <span class="a-tag">{sensitive ? "assume — sensitive" : "assume"}</span>
+  <slot />
+</span>
+
+<style>
+  .assumption {
+    border-bottom: 1px dashed var(--rule-strong);
+  }
+  .a-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-3);
+    margin-right: 0.35rem;
+  }
+  .assumption.sensitive {
+    border-bottom-color: var(--warn);
+  }
+  .assumption.sensitive .a-tag {
+    color: var(--warn);
+  }
+</style>

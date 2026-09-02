@@ -1,0 +1,78 @@
+---
+interface Props {
+  name: string;
+  slug: string;
+  role: string;
+  bio: string;
+  desk: "finance" | "consulting";
+  links?: { linkedin?: string; github?: string; email?: string };
+}
+
+const { name, slug, role, bio, desk, links = {} } = Astro.props;
+const hasLinks = Boolean(links.linkedin || links.github || links.email);
+---
+
+<aside class="author-card" data-desk={desk}>
+  <p class="ac-kicker">Written by</p>
+  <p class="ac-name"><a href={`/authors/${slug}`}>{name}</a></p>
+  <p class="ac-role">{role}</p>
+  <p class="ac-bio">{bio}</p>
+  {
+    hasLinks && (
+      <p class="ac-links">
+        {links.linkedin && <a href={links.linkedin}>LinkedIn</a>}
+        {links.github && <a href={links.github}>GitHub</a>}
+        {links.email && <a href={`mailto:${links.email}`}>Email</a>}
+      </p>
+    )
+  }
+</aside>
+
+<style>
+  .author-card {
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--desk, var(--rule-strong));
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    border-radius: 2px;
+  }
+  .ac-kicker,
+  .ac-links {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+  }
+  .ac-name {
+    margin-top: 0.15rem;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+  }
+  .ac-name a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .ac-name a:hover {
+    text-decoration: underline;
+  }
+  .ac-role {
+    margin-top: 0.15rem;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+  .ac-bio {
+    margin-top: 0.6rem;
+    max-width: 60ch;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .ac-links {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 1rem;
+  }
+  .ac-links a {
+    color: var(--ink-2);
+  }
+</style>

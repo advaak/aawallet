@@ -1,0 +1,52 @@
+---
+interface Artifact {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  artifacts: Artifact[];
+}
+
+const { artifacts } = Astro.props;
+---
+
+<section class="artifacts" aria-label="Artifacts">
+  <p class="kicker">Artifacts</p>
+  <ul>
+    {
+      artifacts.map((a) => (
+        <li>
+          <a href={a.href} download>
+            {a.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .kicker {
+    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  a {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--desk, var(--accent));
+  }
+  a::before {
+    content: "↓ ";
+  }
+</style>

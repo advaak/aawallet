@@ -1,0 +1,106 @@
+---
+interface Entry {
+  date: Date;
+  status: "intact" | "weakened" | "broken";
+  note: string;
+}
+
+interface Props {
+  entries: Entry[];
+}
+
+const { entries } = Astro.props;
+
+// Append-only in frontmatter; displayed newest first. Never edit past entries (CLAUDE.md §6).
+const sorted = [...entries].sort((a, b) => b.date.getTime() - a.date.getTime());
+---
+
+<section class="log" aria-label="Status log">
+  <p class="kicker">Status log</p>
+  {
+    sorted.length === 0 ? (
+      <p class="empty">No updates since publication.</p>
+    ) : (
+      <ol>
+        {sorted.map((e) => (
+          <li>
+            <time datetime={e.date.toISOString().slice(0, 10)}>
+              {e.date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                timeZone: "UTC",
+              })}
+            </time>
+            <span class="s" data-status={e.status}>
+              {e.status}
+            </span>
+            <span class="n">{e.note}</span>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</section>
+
+<style>
+  .kicker {
+    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  .empty {
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  ol {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 6.5rem 6rem 1fr;
+    gap: 0.5rem 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.9375rem;
+  }
+  li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  time {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  .s {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .s[data-status="intact"] {
+    color: var(--good);
+  }
+  .s[data-status="weakened"] {
+    color: var(--warn);
+  }
+  .s[data-status="broken"] {
+    color: var(--crit);
+  }
+  .n {
+    color: var(--ink-2);
+  }
+  @media (max-width: 34rem) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

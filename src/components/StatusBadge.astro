@@ -1,0 +1,32 @@
+---
+interface Props {
+  status: "intact" | "weakened" | "broken";
+}
+
+const { status } = Astro.props;
+
+const toneVar =
+  status === "intact"
+    ? "var(--good)"
+    : status === "weakened"
+      ? "var(--warn)"
+      : "var(--crit)";
+---
+
+<span class="status" style={`--tone: ${toneVar}`} data-status={status}>{status}</span>
+
+<style>
+  .status {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--tone);
+    border: 1px solid var(--tone);
+    background: color-mix(in oklab, var(--tone) 10%, var(--surface));
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+</style>

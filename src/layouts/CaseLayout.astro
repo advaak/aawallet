@@ -1,0 +1,86 @@
+---
+import { getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import PostLayout from "./PostLayout.astro";
+import Byline from "../components/Byline.astro";
+import PromptBox from "../components/PromptBox.astro";
+import TestingBox from "../components/TestingBox.astro";
+import ArtifactList from "../components/ArtifactList.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+
+interface Props {
+  entry: CollectionEntry<"cases">;
+}
+
+const { entry } = Astro.props;
+const c = entry.data;
+const author = await getEntry(c.author);
+const desk = c.desk;
+---
+
+<PostLayout title={c.title} description={c.prompt} desk={desk}>
+  <p class="case-kicker" slot="kicker">
+    <span>{c.caseType.replace(/-/g, " ")}</span>
+    <span class="dot" aria-hidden="true">·</span>
+    <span>{c.difficulty}</span>
+    <span class="dot" aria-hidden="true">·</span>
+    <span class="tnum">{c.timeToSolve} min</span>
+  </p>
+
+  <Byline
+    slot="byline"
+    authorName={author.data.name}
+    authorSlug={author.id}
+    desk={desk}
+    date={c.publishedAt}
+  />
+
+  <div class="af-stack" slot="abovefold">
+    <PromptBox
+      prompt={c.prompt}
+      timeToSolve={c.timeToSolve}
+      difficulty={c.difficulty}
+      caseType={c.caseType}
+    />
+    <TestingBox items={c.testing} />
+  </div>
+
+  <slot />
+
+  <div class="foot-stack" slot="foot">
+    {c.artifacts.length > 0 && <ArtifactList artifacts={c.artifacts} />}
+    <AuthorCard
+      name={author.data.name}
+      slug={author.id}
+      role={author.data.role}
+      bio={author.data.bio}
+      desk={desk}
+      links={author.data.links}
+    />
+  </div>
+</PostLayout>
+
+<style>
+  .case-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+  }
+  .dot {
+    color: var(--rule-strong);
+  }
+  .af-stack,
+  .foot-stack {
+    display: grid;
+    gap: 1rem;
+    max-width: var(--measure);
+  }
+  .foot-stack {
+    gap: 1.5rem;
+  }
+</style>

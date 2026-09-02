@@ -1,0 +1,40 @@
+---
+interface Props {
+  sources: string[];
+}
+
+const { sources } = Astro.props;
+---
+
+<section class="sources" aria-label="Data sources">
+  <p class="kicker">Data sources</p>
+  <ul>
+    {sources.map((s) => <li>{s}</li>)}
+  </ul>
+</section>
+
+<style>
+  .kicker {
+    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  li {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+  li::before {
+    content: "— ";
+    color: var(--ink-3);
+  }
+</style>

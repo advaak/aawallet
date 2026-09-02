@@ -1,0 +1,44 @@
+---
+interface Props {
+  tone?: "note" | "good" | "warn" | "crit";
+  title?: string;
+}
+
+const { tone = "note", title } = Astro.props;
+
+const toneVar =
+  tone === "good"
+    ? "var(--good)"
+    : tone === "warn"
+      ? "var(--warn)"
+      : tone === "crit"
+        ? "var(--crit)"
+        : "var(--desk, var(--ink-2))";
+---
+
+<aside class="callout" style={`--tone: ${toneVar}`} data-tone={tone}>
+  {title && <p class="c-title">{title}</p>}
+  <div class="c-body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--tone);
+    background: color-mix(in oklab, var(--tone) 6%, var(--surface));
+    padding: 1rem 1.25rem;
+    border-radius: 2px;
+    margin-block: var(--rhythm);
+  }
+  .c-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--tone);
+    margin-bottom: 0.4rem;
+  }
+  .c-body :global(> :first-child) {
+    margin-top: 0;
+  }
+</style>

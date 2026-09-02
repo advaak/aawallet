@@ -1,0 +1,68 @@
+---
+import { getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import PostLayout from "./PostLayout.astro";
+import Byline from "../components/Byline.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+
+interface Props {
+  entry: CollectionEntry<"notes">;
+}
+
+const { entry } = Astro.props;
+const n = entry.data;
+const author = await getEntry(n.author);
+const desk: "finance" | "consulting" | "neutral" =
+  n.desk === "either" ? "neutral" : n.desk;
+---
+
+<PostLayout title={n.title} desk={desk}>
+  {
+    n.tags.length > 0 && (
+      <p class="note-tags" slot="kicker">
+        {n.tags.map((t) => (
+          <span class="tag">{t}</span>
+        ))}
+      </p>
+    )
+  }
+
+  <Byline
+    slot="byline"
+    authorName={author.data.name}
+    authorSlug={author.id}
+    desk={n.desk}
+    date={n.publishedAt}
+  />
+
+  <slot />
+
+  <div slot="foot">
+    <AuthorCard
+      name={author.data.name}
+      slug={author.id}
+      role={author.data.role}
+      bio={author.data.bio}
+      desk={author.data.desk}
+      links={author.data.links}
+    />
+  </div>
+</PostLayout>
+
+<style>
+  .note-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-2);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+  }
+</style>

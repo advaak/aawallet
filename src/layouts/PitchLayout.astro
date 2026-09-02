@@ -1,0 +1,116 @@
+---
+import { getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import PostLayout from "./PostLayout.astro";
+import Byline from "../components/Byline.astro";
+import StatusBadge from "../components/StatusBadge.astro";
+import ThesisBox from "../components/ThesisBox.astro";
+import KillCriteria from "../components/KillCriteria.astro";
+import Disclosure from "../components/Disclosure.astro";
+import StatusLog from "../components/StatusLog.astro";
+import ArtifactList from "../components/ArtifactList.astro";
+import DataSources from "../components/DataSources.astro";
+import AuthorCard from "../components/AuthorCard.astro";
+
+interface Props {
+  entry: CollectionEntry<"pitches">;
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const author = await getEntry(p.author);
+const desk = author.data.desk;
+---
+
+<PostLayout title={p.title} description={p.thesis[0]} desk={desk}>
+  <Fragment slot="kicker">
+    <p class="pitch-kicker">
+      <span class="tkr">{p.ticker}</span>
+      <span class="dir" data-dir={p.direction}>{p.direction}</span>
+      <StatusBadge status={p.status} />
+    </p>
+    <p class="company">{p.company}</p>
+  </Fragment>
+
+  <Byline
+    slot="byline"
+    authorName={author.data.name}
+    authorSlug={author.id}
+    desk={desk}
+    date={p.publishedAt}
+  />
+
+  <div class="af-stack" slot="abovefold">
+    <Disclosure
+      price={p.priceAtPublication}
+      currency={p.currency}
+      date={p.publishedAt}
+      disclosure={p.disclosure}
+    />
+    <ThesisBox thesis={p.thesis} />
+    <KillCriteria items={p.killCriteria} />
+  </div>
+
+  <slot />
+
+  <div class="foot-stack" slot="foot">
+    <StatusLog entries={p.statusLog} />
+    <ArtifactList artifacts={p.artifacts} />
+    <DataSources sources={p.dataSources} />
+    <AuthorCard
+      name={author.data.name}
+      slug={author.id}
+      role={author.data.role}
+      bio={author.data.bio}
+      desk={desk}
+      links={author.data.links}
+    />
+  </div>
+</PostLayout>
+
+<style>
+  .pitch-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+  .tkr {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+  .dir {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    color: var(--ink-2);
+  }
+  .dir[data-dir="long"] {
+    color: var(--good);
+    border-color: var(--good);
+  }
+  .dir[data-dir="short"] {
+    color: var(--crit);
+    border-color: var(--crit);
+  }
+  .company {
+    margin-top: 0.4rem;
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  .af-stack,
+  .foot-stack {
+    display: grid;
+    gap: 1rem;
+    max-width: var(--measure);
+  }
+  .foot-stack {
+    gap: 1.5rem;
+  }
+</style>

@@ -29,6 +29,17 @@
   --good: #1F6B4F;
   --warn: #8F6013;
   --crit: #97302F;
+
+  /* type — serif headings, sans body, mono for tickers/figures/labels (SPEC §6) */
+  --font-serif: Georgia, "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+  /* layout — body measure ~68ch (SPEC §6); non-color tokens, no dark variant needed */
+  --measure: 68ch;
+  --rhythm: 1.5rem;
+  --page-pad: 1.5rem;
+  --page-max: 72rem;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,8 +1,97 @@
 /*
  * Global stylesheet entry point.
- * Tailwind v4 is loaded here via @tailwindcss/vite (no config file, no PostCSS).
- * Tokens are imported first so utilities and component styles can reference them.
- * Real typography / layout rules land in Phase 1.
+ * Tailwind v4 via @tailwindcss/vite (no config file, no PostCSS).
+ * Tokens first so everything below can reference them.
+ * NO hardcoded colors anywhere in this project — every color is a token (SPEC §6, CLAUDE.md §3).
  */
 @import "./tokens.css";
 @import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: light dark;
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--desk, var(--accent));
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9375em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--desk, var(--accent));
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Tabular figures everywhere numbers are compared (SPEC §6). */
+table,
+figure,
+time,
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
