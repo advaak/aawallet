@@ -41,9 +41,14 @@ h5,
 h6 {
   font-family: var(--font-serif);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.011em;
   color: var(--ink);
   text-wrap: balance;
+}
+
+h1 {
+  letter-spacing: -0.022em;
 }
 
 p,
@@ -54,10 +59,29 @@ li {
 a {
   color: var(--desk, var(--accent));
   text-underline-offset: 0.15em;
+  text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+  transition: text-decoration-color 0.12s ease;
 }
 
 a:hover {
   text-decoration-thickness: 2px;
+  text-decoration-color: currentColor;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 22%, var(--surface));
+  color: var(--ink);
+}
+
+/* Shared eyebrow label — mono, uppercase, tracked. Individual pages may still
+   style their own; this is the default look. */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--ink-3);
 }
 
 code,

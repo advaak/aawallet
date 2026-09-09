@@ -45,11 +45,29 @@ const typeLabel =
 
 <style>
   .row {
-    padding-block: 1.25rem;
+    position: relative;
+    padding: 1.25rem 1rem 1.3rem 1.1rem;
     border-bottom: 1px solid var(--rule);
+    margin-inline: -1rem;
+    border-radius: 3px;
+    transition: background 0.12s ease;
   }
-  .row:first-child {
-    padding-top: 0;
+  .row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    width: 2px;
+    background: var(--desk, var(--rule-strong));
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+  .row:hover {
+    background: color-mix(in oklab, var(--desk, var(--ink-3)) 5%, var(--surface));
+  }
+  .row:hover::before {
+    opacity: 1;
   }
   .row-meta {
     display: flex;
@@ -57,11 +75,12 @@ const typeLabel =
     align-items: center;
     gap: 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
   .type {
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    font-weight: 500;
     color: var(--desk, var(--ink-2));
   }
   .tkr {
@@ -91,15 +110,14 @@ const typeLabel =
     color: var(--ink-3);
   }
   .row-title {
-    font-size: 1.25rem;
-    margin-block: 0.35rem 0;
+    font-size: 1.3rem;
+    margin-block: 0.4rem 0.1rem;
   }
   .row-title a {
     color: var(--ink);
     text-decoration: none;
   }
-  .row-title a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--desk, var(--rule-strong));
+  .row:hover .row-title a {
+    color: var(--desk, var(--ink));
   }
 </style>

@@ -4,36 +4,43 @@
  * Structure: bare :root defines the full light palette; dark is a full redefinition
  * of the same names, both under prefers-color-scheme and under [data-theme="dark"]
  * so an explicit toggle always wins.
+ *
+ * Palette: warm ivory paper with a deep finance blue and a consulting teal.
+ * Warm neutrals read more like a print publication than cool grey does.
  */
 
 :root {
   /* surfaces */
-  --paper: #FAFBFC;
+  --paper: #FBF9F4;
   --surface: #FFFFFF;
-  --sunk: #F0F4F7;
+  --sunk: #F3EFE5;
+  --wash: #F6F1E4; /* tinted feature panels (hero, callouts backdrop) */
 
-  /* ink */
-  --ink: #131A21;
-  --ink-2: #3C4956;
-  --ink-3: #6E7C89;
+  /* ink — warm near-black through to a muted stone */
+  --ink: #1A1813;
+  --ink-2: #494438;
+  --ink-3: #7A7365;
 
   /* rules */
-  --rule: #DBE3EA;
-  --rule-strong: #B7C4D0;
+  --rule: #E5DFD1;
+  --rule-strong: #CDC5B0;
 
   /* desk color — structural, not decorative */
-  --accent: #1B5E8C;      /* finance desk */
-  --accent-2: #3E8C7A;    /* consulting desk */
+  --accent: #0F5C86; /* finance desk */
+  --accent-2: #2C8A72; /* consulting desk */
 
   /* status semantics */
-  --good: #1F6B4F;
-  --warn: #8F6013;
-  --crit: #97302F;
+  --good: #1E6A4B;
+  --warn: #9A6212;
+  --crit: #9C2B28;
 
   /* type — serif headings, sans body, mono for tickers/figures/labels (SPEC §6) */
-  --font-serif: Georgia, "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
 
   /* layout — body measure ~68ch (SPEC §6); non-color tokens, no dark variant needed */
   --measure: 68ch;
@@ -44,42 +51,44 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0E141A;
-    --surface: #141D25;
-    --sunk: #0A1015;
+    --paper: #14120E;
+    --surface: #1C1A15;
+    --sunk: #0D0B08;
+    --wash: #211E17;
 
-    --ink: #E7EDF2;
-    --ink-2: #B2C0CC;
-    --ink-3: #7C8B98;
+    --ink: #F1EDE3;
+    --ink-2: #C0BAAC;
+    --ink-3: #857E70;
 
-    --rule: #26313B;
-    --rule-strong: #3B4A57;
+    --rule: #2F2C24;
+    --rule-strong: #48433A;
 
-    --accent: #5AA9D6;
-    --accent-2: #6FBFA9;
+    --accent: #5FB0DE;
+    --accent-2: #6FC7AC;
 
-    --good: #4FB08A;
-    --warn: #D19A4A;
-    --crit: #D96B68;
+    --good: #57B78F;
+    --warn: #D6A052;
+    --crit: #E0726D;
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #0E141A;
-  --surface: #141D25;
-  --sunk: #0A1015;
+  --paper: #14120E;
+  --surface: #1C1A15;
+  --sunk: #0D0B08;
+  --wash: #211E17;
 
-  --ink: #E7EDF2;
-  --ink-2: #B2C0CC;
-  --ink-3: #7C8B98;
+  --ink: #F1EDE3;
+  --ink-2: #C0BAAC;
+  --ink-3: #857E70;
 
-  --rule: #26313B;
-  --rule-strong: #3B4A57;
+  --rule: #2F2C24;
+  --rule-strong: #48433A;
 
-  --accent: #5AA9D6;
-  --accent-2: #6FBFA9;
+  --accent: #5FB0DE;
+  --accent-2: #6FC7AC;
 
-  --good: #4FB08A;
-  --warn: #D19A4A;
-  --crit: #D96B68;
+  --good: #57B78F;
+  --warn: #D6A052;
+  --crit: #E0726D;
 }
