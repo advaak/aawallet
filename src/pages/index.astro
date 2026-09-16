@@ -7,28 +7,28 @@ const latest = (await getAllPosts()).slice(0, 6);
 
 const cards = [
   {
-    href: "/pitches",
-    title: "Pitches",
-    desc: "A thesis in three bullets, explicit kill criteria, and a real model attached.",
+    href: "/finance",
+    title: "Finance",
+    desc: "Weekly finance news and stock pitches — thesis in three bullets, explicit kill criteria, a real model attached.",
     desk: "finance",
   },
   {
-    href: "/scorecard",
-    title: "Scorecard",
-    desc: "Every pitch and whether its thesis still holds. No returns column, on purpose.",
+    href: "/cases",
+    title: "Casebook",
+    desc: "Real interview problems, finance and consulting both — solved in the open, wrong turns kept in.",
+    desk: "consulting",
+  },
+  {
+    href: "/glossary",
+    title: "Glossary",
+    desc: "Every pitch, case, and note published here, with its date and author, in one place.",
     desk: null,
   },
   {
-    href: "/finance",
-    title: "Finance desk",
-    desc: "Paper LBO, DCF, comps, merger math — worked the way an interviewer states them.",
-    desk: "finance",
-  },
-  {
-    href: "/consulting",
-    title: "Consulting desk",
-    desc: "Market sizing, profitability, pricing, growth — structured cold, wrong turns kept in.",
-    desk: "consulting",
+    href: "/about",
+    title: "About",
+    desc: "Who writes this, what it is, and what it isn't.",
+    desk: null,
   },
 ];
 
@@ -46,7 +46,7 @@ const deskVar = (d: string | null) =>
 >
   <section class="hero">
     <div class="container">
-      <p class="kicker">Pitches · Cases · Notes</p>
+      <p class="kicker">Finance · Casebook · Glossary</p>
       <h1>Analysis you can check.</h1>
       <p class="hero-lede">
         AAwallet publishes stock pitches and worked finance &amp; consulting
@@ -73,10 +73,6 @@ const deskVar = (d: string | null) =>
         ))
       }
     </section>
-
-    <p class="about-line">
-      New here? <a href="/about">What this is, and what it isn't →</a>
-    </p>
 
     <section class="latest measure" aria-label="Latest posts">
       <p class="kicker section-head">Latest</p>
@@ -167,14 +163,6 @@ const deskVar = (d: string | null) =>
       font-size: 0.9rem;
       line-height: 1.55;
       color: var(--ink-3);
-    }
-
-    .about-line {
-      font-size: 0.9375rem;
-      color: var(--ink-3);
-    }
-    .about-line a {
-      color: var(--ink-2);
     }
 
     .section-head {

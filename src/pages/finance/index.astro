@@ -1,14 +1,64 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import DeskLanding from "../../components/DeskLanding.astro";
+import PostRow from "../../components/PostRow.astro";
+import { getPitchItems } from "../../lib/posts";
+
+const pitches = await getPitchItems();
 ---
 
 <BaseLayout
-  title="Finance desk — AAwallet"
-  description="Worked finance interview cases — paper LBO, DCF, comps, accretion/dilution, merger math — stated cold and solved in the open."
+  title="Finance — AAwallet"
+  description="Weekly finance news and stock pitches: thesis in three bullets, explicit kill criteria, and a linked model."
 >
-  <DeskLanding
-    desk="finance"
-    blurb="Technical interview cases: paper LBOs, DCFs, comps, accretion/dilution, merger math. Each is stated the way an interviewer would state it, then worked through with the arithmetic visible and at least one wrong turn left in."
-  />
+  <div class="container stack measure page">
+    <header>
+      <p class="kicker">Weekly finance news</p>
+      <h1>Finance</h1>
+      <p class="lede">
+        Stock pitches, newest first. Each one states its kill criteria and
+        links a real model. Every post here is archived in the
+        <a href="/glossary">glossary</a>.
+      </p>
+    </header>
+
+    {
+      pitches.length === 0 ? (
+        <p class="empty">
+          No pitches published yet. Drafts show in local development only.
+        </p>
+      ) : (
+        <div class="rows">
+          {pitches.map((item) => (
+            <PostRow item={item} compact />
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <style>
+    .page {
+      padding-block: 2.5rem 1rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.4rem);
+      margin-block: 0.35rem 0.5rem;
+    }
+    .lede {
+      color: var(--ink-2);
+    }
+    .rows {
+      margin-top: 0.5rem;
+    }
+    .empty {
+      color: var(--ink-3);
+    }
+  </style>
 </BaseLayout>

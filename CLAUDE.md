@@ -35,11 +35,20 @@ npx astro check  # type check — must be clean
 - **Components are Astro, not React.** `.astro` files.
 - **Prose measure ~68ch.** Tables and charts may go wider inside an `overflow-x: auto` container; the page body never scrolls sideways.
 
-## The scorecard
+## The scorecard → glossary
 
-Derived at build time from the `pitches` collection by `src/lib/scorecard.ts`. There is **no separate scorecard data file** and there must never be one. To update a pitch's status, edit that pitch's frontmatter: change `status` and append an entry to `statusLog`.
+The dedicated thesis-status scorecard was removed at the owner's request and
+replaced by `/glossary`, a plain index of every pitch/case/note (title, type,
+author, date) derived from `src/lib/posts.ts`. There is **no separate glossary
+data file** and there must never be one.
 
-There is deliberately **no returns column**. Do not add one, and do not add price-fetching of any kind. Prices are stamped once at publication and left alone.
+Per-pitch status still lives in that pitch's own frontmatter (`status`,
+append-only `statusLog`) and still renders on the pitch page — only the
+cross-pitch aggregate table is gone.
+
+There is still deliberately **no returns column** anywhere, and no
+price-fetching of any kind. Prices are stamped once at publication and left
+alone.
 
 ## Voice
 

@@ -1,7 +1,7 @@
 import rss from "@astrojs/rss";
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { includeDrafts, caseHref } from "../lib/posts";
+import { includeDrafts, caseHref, pitchHref } from "../lib/posts";
 
 export const GET: APIRoute = async (context) => {
   const [pitches, cases, notes] = await Promise.all([
@@ -17,7 +17,7 @@ export const GET: APIRoute = async (context) => {
     ...vis(pitches).map((p) => ({
       title: `${p.data.ticker} — ${p.data.title}`,
       pubDate: p.data.publishedAt,
-      link: `/pitches/${p.id}/`,
+      link: `${pitchHref(p)}/`,
       description: p.data.thesis[0],
     })),
     ...vis(cases).map((c) => ({

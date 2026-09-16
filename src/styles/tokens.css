@@ -5,34 +5,39 @@
  * of the same names, both under prefers-color-scheme and under [data-theme="dark"]
  * so an explicit toggle always wins.
  *
- * Palette: warm ivory paper with a deep finance blue and a consulting teal.
- * Warm neutrals read more like a print publication than cool grey does.
+ * Palette: matched to Bloomberg's look — stark black masthead, white/black
+ * editorial body, Bloomberg-orange as the primary accent.
  */
 
 :root {
   /* surfaces */
-  --paper: #FBF9F4;
+  --paper: #FFFFFF;
   --surface: #FFFFFF;
-  --sunk: #F3EFE5;
-  --wash: #F6F1E4; /* tinted feature panels (hero, callouts backdrop) */
+  --sunk: #F2F2F0;
+  --wash: #FFF3E6; /* tinted feature panels (hero, callouts backdrop) */
 
-  /* ink — warm near-black through to a muted stone */
-  --ink: #1A1813;
-  --ink-2: #494438;
-  --ink-3: #7A7365;
+  /* ink */
+  --ink: #101010;
+  --ink-2: #3D3D3D;
+  --ink-3: #6E6E6E;
 
   /* rules */
-  --rule: #E5DFD1;
-  --rule-strong: #CDC5B0;
+  --rule: #E3E3E1;
+  --rule-strong: #C7C7C4;
 
   /* desk color — structural, not decorative */
-  --accent: #0F5C86; /* finance desk */
-  --accent-2: #2C8A72; /* consulting desk */
+  --accent: #E2650E; /* finance desk — Bloomberg orange */
+  --accent-2: #35607D; /* consulting desk */
 
   /* status semantics */
-  --good: #1E6A4B;
-  --warn: #9A6212;
-  --crit: #9C2B28;
+  --good: #1E7145;
+  --warn: #B5680A;
+  --crit: #B23A2E;
+
+  /* masthead — always black, in both themes, like Bloomberg's top bar */
+  --masthead: #0A0A0A;
+  --on-masthead: #F5F4F1;
+  --on-masthead-muted: #ADABA6;
 
   /* type — serif headings, sans body, mono for tickers/figures/labels (SPEC §6) */
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
@@ -51,44 +56,44 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #14120E;
-    --surface: #1C1A15;
-    --sunk: #0D0B08;
-    --wash: #211E17;
+    --paper: #0B0B0B;
+    --surface: #161616;
+    --sunk: #000000;
+    --wash: #211407;
 
-    --ink: #F1EDE3;
-    --ink-2: #C0BAAC;
-    --ink-3: #857E70;
+    --ink: #F4F2ED;
+    --ink-2: #C7C3BA;
+    --ink-3: #8C887F;
 
-    --rule: #2F2C24;
-    --rule-strong: #48433A;
+    --rule: #2B2A27;
+    --rule-strong: #423F3A;
 
-    --accent: #5FB0DE;
-    --accent-2: #6FC7AC;
+    --accent: #FF8A3D;
+    --accent-2: #6FA0C2;
 
-    --good: #57B78F;
-    --warn: #D6A052;
-    --crit: #E0726D;
+    --good: #4FB07B;
+    --warn: #E0A542;
+    --crit: #E2685C;
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #14120E;
-  --surface: #1C1A15;
-  --sunk: #0D0B08;
-  --wash: #211E17;
+  --paper: #0B0B0B;
+  --surface: #161616;
+  --sunk: #000000;
+  --wash: #211407;
 
-  --ink: #F1EDE3;
-  --ink-2: #C0BAAC;
-  --ink-3: #857E70;
+  --ink: #F4F2ED;
+  --ink-2: #C7C3BA;
+  --ink-3: #8C887F;
 
-  --rule: #2F2C24;
-  --rule-strong: #48433A;
+  --rule: #2B2A27;
+  --rule-strong: #423F3A;
 
-  --accent: #5FB0DE;
-  --accent-2: #6FC7AC;
+  --accent: #FF8A3D;
+  --accent-2: #6FA0C2;
 
-  --good: #57B78F;
-  --warn: #D6A052;
-  --crit: #E0726D;
+  --good: #4FB07B;
+  --warn: #E0A542;
+  --crit: #E2685C;
 }

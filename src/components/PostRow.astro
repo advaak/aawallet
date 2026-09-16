@@ -5,9 +5,11 @@ import StatusBadge from "./StatusBadge.astro";
 
 interface Props {
   item: PostItem;
+  /** Denser layout for long single-type feeds (e.g. the Finance pitch list). */
+  compact?: boolean;
 }
 
-const { item } = Astro.props;
+const { item, compact = false } = Astro.props;
 
 const deskVar =
   item.desk === "finance"
@@ -20,7 +22,7 @@ const typeLabel =
   item.type === "pitch" ? "Pitch" : item.type === "case" ? "Case" : "Note";
 ---
 
-<article class="row" style={`--desk: ${deskVar}`}>
+<article class="row" class:list={{ compact }} style={`--desk: ${deskVar}`}>
   <p class="row-meta">
     <span class="type">{typeLabel}</span>
     {item.ticker && <span class="tkr">{item.ticker}</span>}
@@ -119,5 +121,17 @@ const typeLabel =
   }
   .row:hover .row-title a {
     color: var(--desk, var(--ink));
+  }
+
+  /* Compact — dense headline-list feel, no oversized gaps between items. */
+  .row.compact {
+    padding-block: 0.75rem 0.8rem;
+  }
+  .row.compact .row-title {
+    font-size: 1.05rem;
+    margin-block: 0.25rem 0.05rem;
+  }
+  .row.compact .row-meta {
+    font-size: 0.68rem;
   }
 </style>

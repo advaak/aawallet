@@ -158,23 +158,32 @@ export const collections = { authors, pitches, cases, notes };
 
 ## 4. Routes
 
+> **Revised post-launch** (nav restructure requested by the site owner): the
+> finance/consulting desk split moved from top-nav to per-post styling, the
+> scorecard became a general glossary, and the Notes tab was dropped from
+> navigation. Superseded by this table — kept for history, not re-litigated.
+
 | Route | Content |
 |---|---|
-| `/` | "Start here" pinned block, latest 6 posts across all types, both desks visible |
-| `/scorecard` | Every pitch: ticker, direction, date, price at publication, status, last update. Sortable by column via plain `<table>` + a tiny inline sort script, or pre-sorted links. No framework. |
-| `/pitches` | Index, newest first |
-| `/pitches/[slug]` | PitchLayout |
-| `/finance` | Desk landing: author blurb + finance cases grouped by `caseType` |
-| `/finance/[slug]` | CaseLayout |
-| `/consulting` | Same, consulting desk |
-| `/consulting/[slug]` | CaseLayout |
-| `/notes`, `/notes/[slug]` | |
+| `/` | "Start here" pinned block, latest 6 posts across all types |
+| `/finance` | "Weekly finance news" — the pitches feed, newest first |
+| `/finance/[slug]` | PitchLayout |
+| `/cases` ("Casebook") | Every case, both desks, grouped by `caseType`. Each case keeps its own desk color. |
+| `/cases/[slug]` | CaseLayout |
+| `/notes/[slug]` | NoteLayout. No nav tab or index — reachable via the glossary or a direct link. |
+| `/glossary` | Every pitch, case, and note: title, type, author, date. Sortable by column via plain `<table>` + a tiny inline sort script. No framework. Replaces the old thesis-status scorecard. |
 | `/authors/[slug]` | Bio, desk, every post by that author. **This is the resume URL.** |
-| `/about` | Both authors, what the site is, what it isn't |
+| `/about` | All authors (two spots minimum), what the site is, what it isn't |
 | `/disclaimer` | Full text. Linked from every page footer. |
 | `/rss.xml` | All post types |
 
 `draft: true` excludes a post from every index and the RSS feed in production builds only.
+
+**Note:** removing the scorecard also removes the site's aggregate thesis-status
+tracking (per-pitch `status`/`statusLog` still render on the pitch itself — only
+the cross-pitch table is gone). This reverses the "no returns column, tracks
+thesis status" design goal stated elsewhere in this doc and in CLAUDE.md; those
+sections describe the original intent and are not rewritten wholesale here.
 
 ---
 

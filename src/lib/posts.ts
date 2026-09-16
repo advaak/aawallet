@@ -35,9 +35,16 @@ async function authorIndex() {
   return new Map(authors.map((a) => [a.id, a.data]));
 }
 
-/** Path an entry is served at, by type (and by desk for cases). */
+/** Path an entry is served at, by type. Cases live together under /cases
+ *  (the "Casebook") regardless of desk; each still carries its own desk
+ *  color on the page itself. */
 export function caseHref(entry: CollectionEntry<"cases">): string {
-  return `/${entry.data.desk}/${entry.id}`;
+  return `/cases/${entry.id}`;
+}
+
+/** Pitches live under /finance ("weekly finance news"). */
+export function pitchHref(entry: CollectionEntry<"pitches">): string {
+  return `/finance/${entry.id}`;
 }
 
 export async function getPitchItems(): Promise<PostItem[]> {
@@ -52,7 +59,7 @@ export async function getPitchItems(): Promise<PostItem[]> {
         type: "pitch",
         id: p.id,
         title: p.data.title,
-        href: `/pitches/${p.id}`,
+        href: pitchHref(p),
         publishedAt: p.data.publishedAt,
         authorId: p.data.author.id,
         authorName: author?.name ?? p.data.author.id,

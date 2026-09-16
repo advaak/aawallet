@@ -1,0 +1,94 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostRow from "../../components/PostRow.astro";
+import { getCaseItems } from "../../lib/posts";
+
+// Canonical caseType order (SPEC §3 enum) so groups render predictably.
+const CASE_TYPE_ORDER: CollectionEntry<"cases">["data"]["caseType"][] = [
+  "paper-lbo",
+  "dcf",
+  "comps",
+  "accretion-dilution",
+  "merger-math",
+  "market-sizing",
+  "profitability",
+  "market-entry",
+  "pricing",
+  "growth-strategy",
+];
+
+const cases = await getCaseItems();
+const groups = CASE_TYPE_ORDER.map((type) => ({
+  type,
+  label: type.replace(/-/g, " "),
+  items: cases.filter((c) => c.caseType === type),
+})).filter((g) => g.items.length > 0);
+---
+
+<BaseLayout
+  title="Casebook — AAwallet"
+  description="Real interview problems, worked through in the open: paper LBO, DCF, comps, market sizing, pricing, and more. Arithmetic shown, wrong turns kept in."
+>
+  <div class="container stack-lg page">
+    <header class="measure">
+      <p class="kicker">Case Walkthroughs</p>
+      <h1>Casebook</h1>
+      <p class="lede">
+        Real interview problems, taken cold and solved in the open — finance
+        and consulting both. Every case shows the arithmetic and keeps at
+        least one wrong turn in, on purpose.
+      </p>
+    </header>
+
+    {
+      groups.length === 0 ? (
+        <p class="empty">No cases published yet. Drafts show in local development only.</p>
+      ) : (
+        <div class="stack-lg">
+          {groups.map((g) => (
+            <div class="group measure">
+              <h2>{g.label}</h2>
+              <div>
+                {g.items.map((item) => (
+                  <PostRow item={item} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <style>
+    .page {
+      padding-block: 2.5rem 1rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.4rem);
+      margin-block: 0.35rem 0.5rem;
+    }
+    .lede {
+      color: var(--ink-2);
+    }
+    .group h2 {
+      font-size: 1.05rem;
+      text-transform: capitalize;
+      color: var(--ink-2);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--rule-strong);
+      margin-bottom: 0.25rem;
+    }
+    .empty {
+      color: var(--ink-3);
+    }
+  </style>
+</BaseLayout>

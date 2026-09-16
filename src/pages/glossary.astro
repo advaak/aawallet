@@ -1,0 +1,205 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllPosts } from "../lib/posts";
+
+const posts = await getAllPosts();
+
+function iso(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+const typeLabel = (t: string) => (t === "pitch" ? "Pitch" : t === "case" ? "Case" : "Note");
+---
+
+<BaseLayout
+  title="Glossary — AAwallet"
+  description="Every pitch, case, and note published on AAwallet, with its date and author, in one place."
+>
+  <div class="container glossary-page">
+    <header class="measure">
+      <p class="kicker">Glossary</p>
+      <h1>Glossary</h1>
+      <p class="lede">
+        Everything published on AAwallet — every pitch, case, and note — with
+        its date and author. Click a column to sort.
+      </p>
+    </header>
+
+    <div class="table-wrap">
+      {
+        posts.length === 0 ? (
+          <p class="empty">Nothing published yet. Drafts show in local development only.</p>
+        ) : (
+          <div class="glossary" data-glossary>
+            <table>
+              <thead>
+                <tr>
+                  <th data-key="title" scope="col">Title</th>
+                  <th data-key="type" scope="col">Type</th>
+                  <th data-key="author" scope="col">Author</th>
+                  <th data-key="date" data-type="date" aria-sort="descending" scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {posts.map((p) => (
+                  <tr>
+                    <td data-title={p.title}>
+                      <a href={p.href}>{p.title}</a>
+                    </td>
+                    <td data-type={typeLabel(p.type)}>{typeLabel(p.type)}</td>
+                    <td data-author={p.authorName}>
+                      <a href={`/authors/${p.authorId}`}>{p.authorName}</a>
+                    </td>
+                    <td data-date={iso(p.publishedAt)}>
+                      <time datetime={iso(p.publishedAt)}>{iso(p.publishedAt)}</time>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <style>
+    .glossary-page {
+      padding-block: 2.5rem 2rem;
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.4rem);
+      margin-block: 0.35rem 0.5rem;
+    }
+    .lede {
+      color: var(--ink-2);
+    }
+    .empty {
+      color: var(--ink-3);
+    }
+    .table-wrap {
+      margin-top: 2rem;
+    }
+    .glossary {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+    }
+    th,
+    td {
+      text-align: left;
+      padding: 0.65rem 0.95rem;
+      border-bottom: 1px solid var(--rule);
+      white-space: nowrap;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--ink-3);
+      background: var(--wash);
+      border-bottom: 2px solid var(--accent);
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover {
+      color: var(--ink);
+    }
+    th:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    th[aria-sort]::after {
+      color: var(--accent);
+    }
+    th[aria-sort="ascending"]::after {
+      content: " ▲";
+    }
+    th[aria-sort="descending"]::after {
+      content: " ▼";
+    }
+    tbody tr:nth-child(even) {
+      background: color-mix(in oklab, var(--sunk) 55%, var(--surface));
+    }
+    tbody tr:hover {
+      background: color-mix(in oklab, var(--accent) 7%, var(--surface));
+    }
+    td a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    td a:hover {
+      text-decoration: underline;
+    }
+    td[data-type] {
+      color: var(--ink-3);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  </style>
+
+  <script>
+    // Framework-free column sort (same pattern SPEC §4 sanctions for tables).
+    document.querySelectorAll<HTMLElement>("[data-glossary]").forEach((root) => {
+      const table = root.querySelector("table");
+      const tbody = table?.querySelector("tbody");
+      const head = table?.tHead;
+      if (!table || !tbody || !head) return;
+      const ths = Array.from(head.rows[0].cells);
+
+      ths.forEach((th, index) => {
+        const key = th.dataset.key;
+        if (!key) return;
+        const type = th.dataset.type;
+
+        const sort = () => {
+          const next =
+            th.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+          ths.forEach((o) => o.removeAttribute("aria-sort"));
+          th.setAttribute("aria-sort", next);
+
+          const rows = Array.from(tbody.rows);
+          rows.sort((a, b) => {
+            const ca = a.cells[index];
+            const cb = b.cells[index];
+            let x: string | number = ca.dataset[key] ?? ca.textContent?.trim() ?? "";
+            let y: string | number = cb.dataset[key] ?? cb.textContent?.trim() ?? "";
+            if (type === "date") {
+              x = Date.parse(x as string);
+              y = Date.parse(y as string);
+            }
+            const cmp = x < y ? -1 : x > y ? 1 : 0;
+            return next === "ascending" ? cmp : -cmp;
+          });
+          rows.forEach((r) => tbody.appendChild(r));
+        };
+
+        th.setAttribute("tabindex", "0");
+        th.setAttribute("role", "button");
+        th.addEventListener("click", sort);
+        th.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            sort();
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

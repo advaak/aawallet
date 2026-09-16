@@ -11,11 +11,9 @@ const { title, description } = Astro.props;
 const year = new Date().getFullYear();
 
 const nav = [
-  { href: "/pitches", label: "Pitches" },
   { href: "/finance", label: "Finance" },
-  { href: "/consulting", label: "Consulting" },
-  { href: "/notes", label: "Notes" },
-  { href: "/scorecard", label: "Scorecard" },
+  { href: "/cases", label: "Casebook" },
+  { href: "/glossary", label: "Glossary" },
   { href: "/about", label: "About" },
 ];
 
@@ -38,6 +36,17 @@ const isCurrent = (href: string) =>
       title="AAwallet"
       href="/rss.xml"
     />
+    <script is:inline>
+      // Apply a saved theme before paint, so there's no flash of the wrong
+      // theme. No preference saved = falls through to the OS setting, which
+      // tokens.css already handles via prefers-color-scheme.
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -54,6 +63,15 @@ const isCurrent = (href: string) =>
             ))
           }
         </nav>
+        <button
+          type="button"
+          class="theme-toggle"
+          id="theme-toggle"
+          aria-label="Switch between light and dark"
+        >
+          <span class="tt-icon tt-sun" aria-hidden="true">☀</span>
+          <span class="tt-icon tt-moon" aria-hidden="true">☾</span>
+        </button>
       </div>
     </header>
 
@@ -75,6 +93,28 @@ const isCurrent = (href: string) =>
       </div>
     </footer>
 
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById("theme-toggle");
+        if (!btn) return;
+        var root = document.documentElement;
+        function current() {
+          var saved = root.getAttribute("data-theme");
+          if (saved) return saved;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        btn.addEventListener("click", function () {
+          var next = current() === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch (e) {}
+        });
+      })();
+    </script>
+
     <style>
       .wrap {
         max-width: var(--page-max);
@@ -85,7 +125,7 @@ const isCurrent = (href: string) =>
       .skip {
         position: absolute;
         left: -9999px;
-        z-index: 10;
+        z-index: 30;
       }
       .skip:focus {
         left: var(--page-pad);
@@ -101,25 +141,23 @@ const isCurrent = (href: string) =>
         position: sticky;
         top: 0;
         z-index: 20;
-        background: color-mix(in oklab, var(--surface) 88%, transparent);
-        border-bottom: 1px solid var(--rule);
-        backdrop-filter: saturate(1.4) blur(8px);
-        -webkit-backdrop-filter: saturate(1.4) blur(8px);
+        background: var(--masthead);
+        border-bottom: 2px solid var(--accent);
       }
       .site-header .wrap {
         display: flex;
         flex-wrap: wrap;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
         gap: 0.5rem 1.5rem;
-        padding-block: 0.9rem;
+        padding-block: 0.85rem;
       }
       .wordmark {
         font-family: var(--font-serif);
         font-weight: 600;
         font-size: 1.2rem;
         letter-spacing: -0.01em;
-        color: var(--ink);
+        color: var(--on-masthead);
         text-decoration: none;
       }
       .wordmark .dot {
@@ -128,23 +166,24 @@ const isCurrent = (href: string) =>
       .site-header nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.85rem 1.15rem;
+        gap: 0.85rem 1.25rem;
+        margin-inline-start: auto;
       }
       .site-header nav a {
         position: relative;
         font-family: var(--font-mono);
         font-size: 0.78rem;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--ink-3);
+        letter-spacing: 0.07em;
+        color: var(--on-masthead-muted);
         text-decoration: none;
         padding-bottom: 0.15rem;
       }
       .site-header nav a:hover {
-        color: var(--ink);
+        color: var(--on-masthead);
       }
       .site-header nav a[aria-current="page"] {
-        color: var(--ink);
+        color: var(--on-masthead);
       }
       .site-header nav a[aria-current="page"]::after {
         content: "";
@@ -156,17 +195,57 @@ const isCurrent = (href: string) =>
         background: var(--accent);
       }
 
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        margin-left: 1rem;
+        padding: 0;
+        background: transparent;
+        border: 1px solid var(--on-masthead-muted);
+        border-radius: 999px;
+        color: var(--on-masthead);
+        cursor: pointer;
+        line-height: 1;
+      }
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .tt-icon {
+        font-size: 0.85rem;
+      }
+      .tt-moon {
+        display: none;
+      }
+      :global([data-theme="dark"]) .tt-sun {
+        display: none;
+      }
+      :global([data-theme="dark"]) .tt-moon {
+        display: inline;
+      }
+      @media (prefers-color-scheme: dark) {
+        :global(html:not([data-theme="light"])) .tt-sun {
+          display: none;
+        }
+        :global(html:not([data-theme="light"])) .tt-moon {
+          display: inline;
+        }
+      }
+
       main {
-        min-height: 60vh;
+        min-height: 55vh;
       }
 
       .site-footer {
-        margin-top: 5rem;
+        margin-top: 3rem;
         background: var(--surface);
         border-top: 2px solid var(--accent);
       }
       .site-footer .wrap {
-        padding-block: 2rem;
+        padding-block: 1.5rem;
       }
       .legal {
         max-width: var(--measure);

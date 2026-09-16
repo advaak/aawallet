@@ -9,12 +9,10 @@ import Chart from "../../components/Chart.astro";
 
 export async function getStaticPaths() {
   const cases = await getCollection("cases");
-  return cases
-    .filter((c) => c.data.desk === "consulting")
-    .map((entry) => ({
-      params: { slug: entry.id },
-      props: { entry },
-    }));
+  return cases.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;
