@@ -1,4 +1,4 @@
-# Build Spec — AAwallet (aawallet.com)
+# Build Spec — AAwallet (theaawallet.com)
 
 Implementation contract. The PRD says *what and why*; this says *how*. Read both before running anything.
 
@@ -257,7 +257,7 @@ Run these in order. Each is one Claude Code session. Review the diff before movi
 
 ### Phase 4 — Deploy (target: 30 min)
 
-> Deploy to Vercel. Point aawallet.com at it. Add the email signup form embed to the footer and the bottom of PostLayout. Add Vercel Analytics.
+> Deploy to Vercel. Point theaawallet.com at it. Add the email signup form embed to the footer and the bottom of PostLayout. Add Vercel Analytics.
 
 **Accept when:** the live domain serves the site over HTTPS and a test signup lands in the email tool.
 

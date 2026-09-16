@@ -38,7 +38,7 @@ export const GET: APIRoute = async (context) => {
     title: "AAwallet",
     description:
       "Stock pitches and worked finance & consulting cases, written by two undergraduates.",
-    site: context.site ?? "https://aawallet.com",
+    site: context.site ?? "https://theaawallet.com",
     items,
   });
 };
