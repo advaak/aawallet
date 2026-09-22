@@ -45,35 +45,35 @@ const deskVar = (d: string | null) =>
   description="Stock pitches and worked finance & consulting cases, written by two undergraduates. Every pitch states its kill criteria; every case keeps the wrong turn in."
 >
   <section class="hero">
-    <div class="container">
-      <p class="kicker">Finance · Casebook · Glossary</p>
-      <h1>Analysis you can check.</h1>
-      <p class="hero-lede">
-        AAwallet publishes stock pitches and worked finance &amp; consulting
-        interview cases. Two desks, two authors, one standard: show the
-        arithmetic, state the assumptions, and say what would prove the thesis
-        wrong.
-      </p>
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <p class="kicker">Finance · Casebook · Glossary</p>
+        <h1>Analysis you can check.</h1>
+        <p class="hero-lede">
+          Stock pitches and worked finance &amp; consulting cases. Show the
+          arithmetic, state the assumptions, say what would prove the thesis
+          wrong.
+        </p>
+      </div>
+      <nav class="cards" aria-label="Sections">
+        {
+          cards.map((c) => (
+            <a class="card" href={c.href} style={`--desk: ${deskVar(c.desk)}`}>
+              <span class="card-title">
+                {c.title}
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </span>
+              <span class="card-desc">{c.desc}</span>
+            </a>
+          ))
+        }
+      </nav>
     </div>
   </section>
 
-  <div class="container home stack-lg">
-    <section class="cards" aria-label="Sections">
-      {
-        cards.map((c) => (
-          <a class="card" href={c.href} style={`--desk: ${deskVar(c.desk)}`}>
-            <span class="card-title">
-              {c.title}
-              <span class="arrow" aria-hidden="true">
-                →
-              </span>
-            </span>
-            <span class="card-desc">{c.desc}</span>
-          </a>
-        ))
-      }
-    </section>
-
+  <div class="container home">
     <section class="latest measure" aria-label="Latest posts">
       <p class="kicker section-head">Latest</p>
       {
@@ -85,7 +85,7 @@ const deskVar = (d: string | null) =>
         ) : (
           <div class="rows">
             {latest.map((item) => (
-              <PostRow item={item} />
+              <PostRow item={item} compact />
             ))}
           </div>
         )
@@ -97,48 +97,59 @@ const deskVar = (d: string | null) =>
     .hero {
       background: var(--wash);
       border-bottom: 1px solid var(--rule);
-      padding-block: clamp(3rem, 1.5rem + 7vw, 6rem);
+      padding-block: 1.75rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 52rem) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
     }
     .hero .kicker {
       color: var(--accent);
     }
     .hero h1 {
-      max-width: 20ch;
-      font-size: clamp(2.4rem, 1.5rem + 5vw, 4.25rem);
-      margin-block: 0.6rem 1rem;
+      max-width: 16ch;
+      font-size: clamp(1.6rem, 1.2rem + 2vw, 2.35rem);
+      margin-block: 0.3rem 0.5rem;
     }
     .hero-lede {
-      max-width: 58ch;
-      font-size: clamp(1.05rem, 1rem + 0.4vw, 1.2rem);
+      max-width: 46ch;
+      font-size: 0.95rem;
       color: var(--ink-2);
     }
 
     .home {
-      padding-block: 3rem 1rem;
+      padding-block: 1.5rem 1rem;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      align-content: start;
     }
     .card {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-      padding: 1.25rem 1.35rem 1.4rem;
+      gap: 0.2rem;
+      padding: 0.75rem 0.85rem 0.85rem;
       background: var(--surface);
       border: 1px solid var(--rule);
       border-top: 2px solid var(--desk);
-      border-radius: 3px;
+      border-radius: 2px;
       text-decoration: none;
       transition:
-        transform 0.12s ease,
         border-color 0.12s ease,
         background 0.12s ease;
     }
     .card:hover {
-      transform: translateY(-2px);
       border-color: var(--desk);
       background: color-mix(in oklab, var(--desk) 5%, var(--surface));
     }
@@ -147,7 +158,7 @@ const deskVar = (d: string | null) =>
       align-items: center;
       justify-content: space-between;
       font-family: var(--font-serif);
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--ink);
     }
@@ -160,18 +171,18 @@ const deskVar = (d: string | null) =>
       transform: translateX(3px);
     }
     .card-desc {
-      font-size: 0.9rem;
-      line-height: 1.55;
+      font-size: 0.78rem;
+      line-height: 1.4;
       color: var(--ink-3);
     }
 
     .section-head {
       display: block;
-      padding-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--rule-strong);
     }
     .rows {
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
     .empty {
       margin-top: 1rem;

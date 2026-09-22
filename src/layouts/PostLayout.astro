@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import EmailSignup from "../components/EmailSignup.astro";
 
 interface Props {
   title: string;
@@ -39,14 +38,12 @@ const deskVar =
       <footer class="post-foot">
         <slot name="foot" />
       </footer>
-
-      <EmailSignup variant="post" />
     </div>
   </article>
 
   <style>
     .post {
-      padding-block: 2.75rem 1.5rem;
+      padding-block: 1.75rem 1.5rem;
     }
     .post-inner {
       max-width: var(--page-max);

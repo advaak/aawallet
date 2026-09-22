@@ -49,7 +49,7 @@
 
   /* layout — body measure ~68ch (SPEC §6); non-color tokens, no dark variant needed */
   --measure: 68ch;
-  --rhythm: 1.5rem;
+  --rhythm: 1.25rem;
   --page-pad: 1.5rem;
   --page-max: 72rem;
 }
