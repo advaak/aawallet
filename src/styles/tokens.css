@@ -5,44 +5,48 @@
  * of the same names, both under prefers-color-scheme and under [data-theme="dark"]
  * so an explicit toggle always wins.
  *
- * Palette: matched to Bloomberg's look — stark black masthead, white/black
- * editorial body, Bloomberg-orange as the primary accent.
+ * Palette pulled directly from bloomberg.com's own computed styles (sampled
+ * from the live DOM, not guessed): true black chrome, neutral cool greys
+ * (no warm tint anywhere), a restrained blue for links/CTAs, and red/green
+ * reserved for their actual semantic meaning — negative/positive — never
+ * used decoratively.
  */
 
 :root {
   /* surfaces */
   --paper: #FFFFFF;
   --surface: #FFFFFF;
-  --sunk: #F2F2F0;
-  --wash: #FFF3E6; /* tinted feature panels (hero, callouts backdrop) */
+  --sunk: #EFEFEF; /* exact Bloomberg panel grey */
+  --wash: #EFEFEF; /* same grey — no tinted "feature panel" color */
 
   /* ink */
-  --ink: #101010;
-  --ink-2: #3D3D3D;
-  --ink-3: #6E6E6E;
+  --ink: #000000; /* exact Bloomberg body/headline black */
+  --ink-2: #3C3C3C;
+  --ink-3: #767676;
 
   /* rules */
-  --rule: #E3E3E1;
-  --rule-strong: #C7C7C4;
+  --rule: #E2E2E2;
+  --rule-strong: #CCCCCC; /* exact Bloomberg border grey */
 
   /* desk color — structural, not decorative */
-  --accent: #E2650E; /* finance desk — Bloomberg orange */
-  --accent-2: #35607D; /* consulting desk */
+  --accent: #0057D8; /* finance desk — Bloomberg's own link/CTA blue */
+  --accent-2: #4A4A4A; /* consulting desk — neutral graphite, deliberately desaturated */
 
-  /* status semantics */
-  --good: #1E7145;
-  --warn: #B5680A;
-  --crit: #B23A2E;
+  /* status semantics — matched to Bloomberg's actual up/down colors */
+  --good: #1C8A42;
+  --warn: #A6650D;
+  --crit: #D93A2B;
 
-  /* masthead — always black, in both themes, like Bloomberg's top bar */
-  --masthead: #0A0A0A;
-  --on-masthead: #F5F4F1;
-  --on-masthead-muted: #ADABA6;
+  /* masthead — always true black, in both themes, like Bloomberg's own nav */
+  --masthead: #000000;
+  --on-masthead: #FFFFFF;
+  --on-masthead-muted: #999999; /* exact Bloomberg muted-label grey */
 
-  /* type — serif headings, sans body, mono for tickers/figures/labels (SPEC §6) */
-  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
-    "Times New Roman", serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+  /* type — a bold grotesque sans for headlines (Bloomberg has no serif
+     anywhere), sans body, mono for tickers/figures/labels */
+  --font-display: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
     Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
     "Liberation Mono", monospace;
@@ -56,44 +60,44 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0B0B0B;
-    --surface: #161616;
+    --paper: #101010;
+    --surface: #181818;
     --sunk: #000000;
-    --wash: #211407;
+    --wash: #1C1C1C;
 
-    --ink: #F4F2ED;
-    --ink-2: #C7C3BA;
-    --ink-3: #8C887F;
+    --ink: #F2F2F2;
+    --ink-2: #C7C7C7;
+    --ink-3: #8C8C8C;
 
-    --rule: #2B2A27;
-    --rule-strong: #423F3A;
+    --rule: #2A2A2A;
+    --rule-strong: #3D3D3D;
 
-    --accent: #FF8A3D;
-    --accent-2: #6FA0C2;
+    --accent: #4C9AFF;
+    --accent-2: #B9B9B9;
 
-    --good: #4FB07B;
+    --good: #4DB250;
     --warn: #E0A542;
-    --crit: #E2685C;
+    --crit: #F05143;
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #0B0B0B;
-  --surface: #161616;
+  --paper: #101010;
+  --surface: #181818;
   --sunk: #000000;
-  --wash: #211407;
+  --wash: #1C1C1C;
 
-  --ink: #F4F2ED;
-  --ink-2: #C7C3BA;
-  --ink-3: #8C887F;
+  --ink: #F2F2F2;
+  --ink-2: #C7C7C7;
+  --ink-3: #8C8C8C;
 
-  --rule: #2B2A27;
-  --rule-strong: #423F3A;
+  --rule: #2A2A2A;
+  --rule-strong: #3D3D3D;
 
-  --accent: #FF8A3D;
-  --accent-2: #6FA0C2;
+  --accent: #4C9AFF;
+  --accent-2: #B9B9B9;
 
-  --good: #4FB07B;
+  --good: #4DB250;
   --warn: #E0A542;
-  --crit: #E2685C;
+  --crit: #F05143;
 }
