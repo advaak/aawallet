@@ -39,6 +39,7 @@
 
   /* masthead — always true black, in both themes, like Bloomberg's own nav */
   --masthead: #000000;
+  --masthead-rule: #2E2E2E; /* subtle hairline on black, not a bright accent */
   --on-masthead: #FFFFFF;
   --on-masthead-muted: #999999; /* exact Bloomberg muted-label grey */
 
