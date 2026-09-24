@@ -43,12 +43,13 @@
   --on-masthead: #FFFFFF;
   --on-masthead-muted: #999999; /* exact Bloomberg muted-label grey */
 
-  /* type — Archivo (a real grotesque, in the same family as Bloomberg's own
-     Haas Grotesk) for headlines and body, loaded via Google Fonts in
-     BaseLayout's <head>; system sans as the fallback stack if it fails to
-     load. Mono stays system — already correct for tabular figures. */
-  --font-display: "Archivo", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
+  /* type — Space Grotesk for headlines (distinctive letterforms, doesn't
+     read as a default system font) and Archivo for body copy (a plainer
+     grotesque, easier to read at length). Both loaded via Google Fonts in
+     BaseLayout's <head>; system sans is the fallback stack if either fails
+     to load. Mono stays system — already correct for tabular figures. */
+  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-sans: "Archivo", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
