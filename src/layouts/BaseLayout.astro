@@ -195,7 +195,10 @@ const isCurrent = (href: string) =>
         content: "";
         position: absolute;
         left: 0;
-        right: 0;
+        /* letter-spacing adds a trailing sliver of space after the last
+           character too; pull the underline's right edge in by the same
+           amount so it doesn't overshoot the visible text. */
+        right: 0.07em;
         bottom: -0.9rem;
         height: 2px;
         background: var(--accent);
