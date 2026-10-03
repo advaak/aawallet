@@ -295,9 +295,13 @@ collaborator's change. Do these once, in order:
    and change the `www` `CNAME` to point to `advaak.github.io`.
 6. Wait. When GitHub offers it (it can take up to 24 hours), tick
    **Enforce HTTPS** on the Pages settings page.
-7. Add the other author: repo **Settings > Collaborators > Add people**.
-8. Once the new site is confirmed live, remove the domain from Vercel and delete
-   the Vercel project.
+7. Once the new site is confirmed live, shut Vercel off: remove the domain from
+   the Vercel project and delete the project (or at least **Settings > Git >
+   Disconnect**).
+8. **Only now** add the other author: repo **Settings > Collaborators > Add
+   people**. Do this after step 7, not before. While Vercel is still connected,
+   his pushes would trigger Vercel deployments that its free plan blocks, and
+   Vercel can flag the project and block deploys for you too.
 
 Optional: **Settings > Branches > Add rule** for `main`, requiring one approving
 review, so nothing goes live without the other author signing off.
