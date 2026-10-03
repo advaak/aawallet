@@ -1,123 +1,244 @@
 # Maintaining AAwallet
 
-Plain-English guide for running this site without help. No prior knowledge assumed.
+Plain-English guide for running this site, for both authors. No coding tools
+needed: everything below can be done in a web browser, with ChatGPT or any other
+assistant to help draft.
 
 ## The mental model
 
-The site is a folder of text files in this GitHub repo. When a file changes on
-GitHub, Vercel automatically rebuilds the site and publishes it — live in about a
-minute. You never "upload" anything; you just change files on GitHub.
+The site is a folder of text files in this GitHub repo. When a change lands on
+the `main` branch, GitHub builds the site and publishes it, live in about two
+minutes. You never "upload a website"; you change files on GitHub.
 
 - **Code:** https://github.com/advaak/aawallet
-- **Live site:** https://aawallet-tawny.vercel.app (custom domain `aawallet.com` not connected yet)
-- **Hosting dashboard:** https://vercel.com → project `aawallet`
+- **Live site:** https://theaawallet.com
+- **Deploys:** the **Actions** tab on GitHub (https://github.com/advaak/aawallet/actions).
+  A green check means live; a red X means the build failed and the live site
+  keeps showing the last good version.
+
+> Until the move from Vercel to GitHub Pages is finished (see the checklist at
+> the bottom), deploys still run on Vercel. Check its dashboard instead.
 
 ## Where things live
 
-| Folder | What it holds | File type |
+| Folder | What it holds | Shows up at |
 |---|---|---|
-| `src/content/pitches/` | Stock pitches | `.mdx` |
-| `src/content/cases/` | Finance & consulting cases | `.mdx` |
-| `src/content/notes/` | Short data notes (one chart each) | `.mdx` |
-| `src/content/authors/` | Author profiles — name, bio, links | `.json` |
-| `public/models/` | Spreadsheet files that pitches link to | `.xlsx` / `.csv` |
-| `public/data/` | CSV files that charts read | `.csv` |
-| `src/pages/about.astro` | Wording of the About page | `.astro` |
-| `src/pages/disclaimer.astro` | Wording of the Disclaimer page | `.astro` |
+| `src/content/pitches/` | Stock pitches (`.mdx`) | **Finance** tab |
+| `src/content/cases/` | Interview-style cases, finance and consulting (`.mdx`) | **Casebook** tab |
+| `src/content/notes/` | Short data notes (`.mdx`), no tab of their own | Glossary, Latest |
+| `src/content/authors/` | One author profile each (`.json`) | **About**, `/authors/<name>` |
+| `public/models/` | Files a pitch links to (spreadsheets, PDFs) | download links |
+| `public/images/` | Images used inside posts | in-post figures |
+| `public/data/` | CSV files that charts read | chart downloads |
 
-Rules the site is built on are in `SPEC.md` and `CLAUDE.md`. Read those before
-changing anything structural.
+The **Glossary** page builds itself from every published post. Nothing to edit.
 
-## An `.mdx` post file
+Site rules live in `SPEC.md` and `CLAUDE.md`. The checklist a post must meet
+before publishing is `SPEC.md` section 9.
 
-Two parts. The bit between the `---` lines is settings ("frontmatter"). Below it
-is the article, written as plain text with blank lines between paragraphs.
+## The house rules (apply to both of us)
+
+- **Never invent a number.** Every figure comes from a source we can name. If we
+  don't have it, we don't print it.
+- Show the arithmetic. State assumptions. Say what would prove the thesis wrong.
+- Direct, short sentences. No hedging. Never imply professional credentials.
+- Case walkthroughs keep the wrong turn in. That's the format.
+- Never edit or delete an old `statusLog` entry. Add a new dated one.
+- The other author reads every post before it goes live.
+
+## A post file
+
+Two parts. The block between the `---` lines is settings ("frontmatter"). Below
+it is the article in plain paragraphs, `##` for headings.
+
+**Pitch** (`src/content/pitches/ticker-slug.mdx`, e.g. `crwd-bad-time-to-buy.mdx`):
 
 ```mdx
 ---
 title: "Why Acme is a short"
 ticker: "ACME"
 company: "Acme Corp"
-direction: "short"
-publishedAt: 2026-03-14
-priceAtPublication: 41.20
-thesis:
-  - "First reason the stock falls."
+direction: "short"            # only "long" or "short"
+publishedAt: 2026-03-14       # YYYY-MM-DD, no quotes
+priceAtPublication: 41.20     # a plain number
+currency: "USD"
+thesis:                       # 2 to 4 bullets
+  - "First reason."
   - "Second reason."
-  - "Third reason."
-killCriteria:
+killCriteria:                 # at least 1: what would prove this wrong
   - "What would prove this wrong."
-author: your-slug          # must match a file in src/content/authors/
-artifacts:
+status: "intact"              # intact | weakened | broken
+statusLog: []
+author: your-author-name      # must match a file in src/content/authors/
+artifacts:                    # at least 1 file, uploaded to public/models/
   - label: "Model (xlsx)"
     href: "/models/acme-model.xlsx"
-dataSources:
+dataSources:                  # at least 1
   - "10-K FY25"
-draft: true                 # true = not shown on the live site yet
+disclosure: "No position, and none intended within 72 hours."   # must be TRUE
+draft: true                   # true = hidden from the lists
 ---
 
-Write the pitch here. Normal paragraphs.
-
-## A heading
-
-More text.
+Write the pitch here.
 ```
 
-`draft: true` keeps a post off the live site while you work on it. Change it to
-`draft: false` (or delete the line) when it's ready. Draft posts DO show when
-previewing locally.
+**Case** (`src/content/cases/consulting-slug.mdx` or `finance-slug.mdx`):
 
-The full checklist each post must meet before publishing is in `SPEC.md` §9.
+```mdx
+---
+title: "Sizing the US market for electric bikes"
+desk: "consulting"            # "finance" or "consulting"
+caseType: "market-sizing"     # paper-lbo, dcf, comps, accretion-dilution,
+                              # merger-math, market-sizing, profitability,
+                              # market-entry, pricing, growth-strategy
+difficulty: "standard"        # warmup | standard | hard
+publishedAt: 2026-03-14
+author: your-author-name
+prompt: "The case, stated cold, the way an interviewer would say it."
+timeToSolve: 20               # minutes
+testing:
+  - "What the interviewer is actually testing."
+artifacts: []
+draft: true
+---
 
-## How to add or edit a post (browser only, no software)
-
-1. Go to https://github.com/advaak/aawallet
-2. Click into the folder, e.g. `src` → `content` → `pitches`
-3. **To edit:** open a file, click the pencil icon (top right), make changes
-4. **To add:** click `Add file` → `Create new file`. Name it
-   `ticker-short-slug.mdx` for a pitch (e.g. `acme-short.mdx`),
-   `finance-slug.mdx` or `consulting-slug.mdx` for a case,
-   `slug.mdx` for a note. Paste in the frontmatter + text.
-5. Scroll down, click **Commit changes**, then **Commit changes** again in the box
-6. Wait ~1 minute. Check https://vercel.com → project `aawallet` → the top
-   deployment should go green ("Ready"). Then refresh the live site.
-
-If the deployment goes **red** ("Error"), your file has a mistake — usually a
-frontmatter typo (wrong date format, missing required field, bad indentation).
-Click the failed deployment → "Build Logs" to see the error, then fix the file.
-The live site keeps showing the last working version until you fix it.
-
-## Editing on your Mac instead (optional, gives a preview)
-
-Needs Node.js (already installed) and the code downloaded locally (it's in
-`~/aawallet`).
-
-```bash
-cd ~/aawallet
-npm install        # first time only
-npm run dev        # starts a preview at http://localhost:4321
+Walk through it. Show the arithmetic. Include one wrong turn.
 ```
 
-Edit files in any text editor. The preview updates as you save. When done:
+Useful pieces inside the article: `<WrongTurn>text</WrongTurn>` for the approach
+that didn't work, `<Assumption>25% a year</Assumption>` to mark an assumption,
+`<KeyNumber value="$4.9B" label="Year-5 cash" />`, and `<Callout title="Note">text</Callout>`.
 
-```bash
-npm run build      # must succeed with no errors
-npx astro check    # must be clean
+**Two gotchas that break the build:**
+1. Don't type `{`, `}`, `<` or `>` in normal text (the site reads them as code).
+   Write "under" or "less than" instead.
+2. A pitch must list at least one file under `artifacts:` or the build fails.
+   Upload the file too (see below), or its download link will be dead.
+
+`draft: true` hides a post from every list, but the page itself still exists if
+someone has the exact link. It is not private.
+
+## Adding a post from the browser (the review flow)
+
+This keeps the "other author reads it first" rule built in.
+
+1. Go to https://github.com/advaak/aawallet and open the folder
+   (e.g. `src` > `content` > `cases`).
+2. **Add file > Create new file.** Type the file name (e.g. `consulting-ebike-sizing.mdx`)
+   and paste the post.
+3. Under **Commit changes**, pick **Create a new branch for this commit and start
+   a pull request**, then **Propose changes**, then **Create pull request**.
+4. Wait about a minute for the check at the bottom of the pull request.
+   **Green** means it builds. **Red** means a formatting mistake: click
+   **Details** to read the error, fix the file (the pull request's **Files changed**
+   tab, then the `...` menu, then **Edit file**), and the check re-runs.
+5. The other author reads it and clicks **Merge pull request**. The site updates
+   about two minutes later.
+
+To edit an existing post, open it, click the pencil, and use the same "new branch
+and pull request" option.
+
+**Uploading a file or image:** open the folder (`public/models/` or
+`public/images/`), **Add file > Upload files**, drag it in, and commit (same
+branch choice). Then link it as `/models/yourfile.pdf` or `/images/yourimage.png`.
+Use file names with no spaces.
+
+## Using ChatGPT to draft a post
+
+Paste this into ChatGPT first, then give it your notes. It will return a file
+ready to paste into GitHub. **Always check every number against your sources:
+the assistant can get facts wrong, and the site's whole point is that it doesn't.**
+
+```text
+You are helping me write a post for AAwallet, a student finance and consulting
+publication. Return ONE file in MDX, starting with the --- line and nothing
+before it, so I can paste it straight into GitHub.
+
+HARD RULES
+- Never invent numbers, quotes, filings or statistics. Use only figures I give
+  you. If a figure is missing, write [NEED: what is missing] instead of guessing.
+- Show the arithmetic. State assumptions explicitly. Say what would prove the
+  thesis wrong. Direct, short sentences, no hedging. Never imply professional
+  credentials.
+- Do not type the characters { } < > in normal text (write "under" or "less
+  than"). Use straight quotes only, and never put a double quote inside a
+  quoted value.
+- Dates are YYYY-MM-DD with no quotes. Keep every field name exactly as shown.
+- Body headings use ##. Case walkthroughs must include one wrong turn, written
+  as <WrongTurn>text</WrongTurn>. Mark key assumptions as
+  <Assumption>text</Assumption>.
+
+If I ask for a PITCH, use exactly this frontmatter:
+---
+title: ""
+ticker: ""
+company: ""
+direction: "long"          (only "long" or "short")
+publishedAt: YYYY-MM-DD
+priceAtPublication: 0.00   (a plain number)
+currency: "USD"
+thesis:                    (2 to 4 bullets)
+  - ""
+killCriteria:              (1 or more: what would prove the thesis wrong)
+  - ""
+status: "intact"
+statusLog: []
+author: MY-AUTHOR-NAME
+artifacts:                 (at least 1 file)
+  - label: ""
+    href: "/models/FILENAME"
+dataSources:               (at least 1)
+  - ""
+disclosure: "No position, and none intended within 72 hours."
+draft: true
+---
+
+If I ask for a CASE, use exactly this frontmatter:
+---
+title: ""
+desk: "consulting"         (or "finance")
+caseType: ""               (one of: paper-lbo, dcf, comps, accretion-dilution,
+                            merger-math, market-sizing, profitability,
+                            market-entry, pricing, growth-strategy)
+difficulty: "standard"     (warmup, standard or hard)
+publishedAt: YYYY-MM-DD
+author: MY-AUTHOR-NAME
+prompt: ""                 (the case, stated cold, like an interviewer would)
+timeToSolve: 20            (minutes)
+testing:
+  - ""                     (what the interviewer is actually testing)
+artifacts: []
+draft: true
+---
+
+My author name is: ______
+Write a PITCH / CASE about: ______
+My notes and sources: ______
 ```
 
-Then push the changes. Easiest without the terminal: install **GitHub Desktop**
-(desktop.github.com), open this repo in it, write a short summary, click
-**Commit**, then **Push origin**.
+## Your author profile
 
-## Updating a pitch's status (the scorecard)
+Each author needs a file in `src/content/authors/`, named like `jane-doe.json`:
 
-The scorecard on `/scorecard` is built automatically from the pitches. To change
-a pitch's status:
+```json
+{
+  "name": "Jane Doe",
+  "desk": "consulting",
+  "role": "Your major and school, stated plainly",
+  "bio": "One or two honest sentences. No inflation.",
+  "links": { "linkedin": "https://www.linkedin.com/in/your-name" }
+}
+```
 
-1. Open its `.mdx` file
-2. Change `status:` to `intact`, `weakened`, or `broken`
-3. Add a dated entry to `statusLog` (never edit or delete old entries — it is
-   append-only):
+The file name (without `.json`) is what you put after `author:` in your posts, and
+it becomes your page at `/authors/jane-doe`, the link for your resume. `desk` is
+`finance` or `consulting`. `links` can be `{}`, or include `linkedin`, `github` and
+`email` (full URLs; `email` is a plain address).
+
+## Updating a pitch's status
+
+Open the pitch, change `status:` to `intact`, `weakened` or `broken`, and **add** a
+dated entry to `statusLog` (never edit or delete old entries):
 
 ```yaml
 status: "weakened"
@@ -127,28 +248,64 @@ statusLog:
     note: "Q1 revenue beat; margin thesis intact but growth call is in question."
 ```
 
+## Editing on your own computer (optional, gives a live preview)
+
+Needs Node.js, Git and the code (`git clone https://github.com/advaak/aawallet.git`).
+
+```bash
+npm install        # first time only
+npm run dev        # preview at http://localhost:4321 (drafts show here)
+npm run build      # must succeed with no errors
+npx astro check    # must be clean
+```
+
+Easiest way to send changes without the terminal: **GitHub Desktop**
+(desktop.github.com). Always **Fetch/Pull** before you start so you don't overwrite
+the other author's work.
+
 ## Common problems
 
 | Symptom | Cause / fix |
 |---|---|
-| Change not showing on live site | Deployment still building, or it failed — check Vercel |
-| Vercel deployment red / "Error" | Frontmatter mistake in the file you just changed; read Build Logs |
-| New post doesn't appear in lists | `draft: true` is still set, or `publishedAt` is a future date |
-| Email signup box missing | `PUBLIC_BUTTONDOWN_USERNAME` env var missing in Vercel |
-| Date error in build | Dates must be `YYYY-MM-DD` with no quotes, e.g. `2026-03-14` |
+| Red X on the pull request or in Actions | Formatting mistake in the file. Open **Details**, read the error, fix the file |
+| Error mentions a field or "expected" | A required field is missing or misspelled (e.g. no `artifacts`, wrong `direction`) |
+| Error mentions "Unexpected character" or "Could not parse" | A `{`, `}`, `<` or `>` in normal text. Rewrite that sentence |
+| Error says an author can't be found | `author:` doesn't match a file name in `src/content/authors/` |
+| A download or image link is dead (404) | The file isn't uploaded, or the name in the link doesn't match exactly |
+| New post missing from the lists | `draft: true` is still set, or `publishedAt` is in the future |
+| Date error | Dates are `YYYY-MM-DD`, no quotes |
+| Email signup box missing | The `PUBLIC_BUTTONDOWN_USERNAME` setting is missing (see below) |
+| Merged but site unchanged | Wait two minutes, hard-refresh (`Cmd+Shift+R`), check the Actions tab |
 
-## Still to do (from Phase 4)
+## Checklist: moving hosting from Vercel to GitHub Pages
 
-- Connect `aawallet.com` (registered on a friend's Wix account) — add it in
-  Vercel → Settings → Domains, then point the domain's nameservers or DNS records
-  at Vercel from the Wix dashboard.
-- Enable Vercel Analytics: project → Analytics tab → Enable, then redeploy once.
-- Have a person read `/disclaimer` and the footer legal text and confirm the
-  wording before any real launch (SPEC §8).
+Why: Vercel's free plan only deploys changes made by its owner, so a second
+author's edits would never go live. GitHub Pages is free and deploys any
+collaborator's change. Do these once, in order:
 
-## Getting help later
+1. **GitHub, repo Settings > Pages:** set **Source** to **GitHub Actions**.
+2. **Settings > Secrets and variables > Actions > Variables tab > New repository
+   variable:** name `PUBLIC_BUTTONDOWN_USERNAME`, value `Advaak`.
+3. **Push** the `.github/workflows/deploy.yml` file (it's already in the repo).
+   Watch the **Actions** tab until it goes green.
+4. **Settings > Pages > Custom domain:** enter `theaawallet.com`, **Save**.
+5. **In Wix (Domains > theaawallet.com > Manage DNS Records):** delete the old
+   Vercel `A` record, add four `A` records on the root (host `@`):
+   `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`,
+   and change the `www` `CNAME` to point to `advaak.github.io`.
+6. Wait. When GitHub offers it (it can take up to 24 hours), tick
+   **Enforce HTTPS** on the Pages settings page.
+7. Add the other author: repo **Settings > Collaborators > Add people**.
+8. Once the new site is confirmed live, remove the domain from Vercel and delete
+   the Vercel project.
 
-- Free Claude at https://claude.ai can help draft post text — paste the result
-  into a new file on GitHub.
-- A future Claude Code session will pick up the project's rules from `SPEC.md`
-  and `CLAUDE.md` in this repo.
+Optional: **Settings > Branches > Add rule** for `main`, requiring one approving
+review, so nothing goes live without the other author signing off.
+
+## Still to do
+
+- Replace `src/content/authors/placeholder-consulting.json` with the real second
+  author's profile.
+- Confirm the `disclosure:` line on the CrowdStrike pitch is true.
+- Have a person read `/disclaimer` and the footer text and confirm the wording
+  before any real launch (SPEC section 8).

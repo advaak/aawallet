@@ -1,0 +1,45 @@
+# Build the site on every push and pull request; deploy to GitHub Pages only
+# when the change lands on main. Any collaborator's push to main deploys —
+# there is no per-person seat or commit-author check (unlike Vercel Hobby).
+#
+# One-time setup (repo Settings): Pages -> Source: "GitHub Actions", and
+# Secrets and variables -> Actions -> Variables -> PUBLIC_BUTTONDOWN_USERNAME.
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+      - name: Install, build, and upload the site
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+        env:
+          # Powers the email signup form. A plain repository variable, not a secret.
+          PUBLIC_BUTTONDOWN_USERNAME: ${{ vars.PUBLIC_BUTTONDOWN_USERNAME }}
+
+  deploy:
+    # Pull requests only get the build check above; they never go live.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
