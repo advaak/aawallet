@@ -16,8 +16,8 @@ minutes. You never "upload a website"; you change files on GitHub.
   A green check means live; a red X means the build failed and the live site
   keeps showing the last good version.
 
-> Until the move from Vercel to GitHub Pages is finished (see the checklist at
-> the bottom), deploys still run on Vercel. Check its dashboard instead.
+The site is hosted on **GitHub Pages**. It used to be on Vercel; see "Hosting and
+domain" at the bottom for why we moved and how it's wired.
 
 ## Where things live
 
@@ -274,34 +274,36 @@ the other author's work.
 | A download or image link is dead (404) | The file isn't uploaded, or the name in the link doesn't match exactly |
 | New post missing from the lists | `draft: true` is still set, or `publishedAt` is in the future |
 | Date error | Dates are `YYYY-MM-DD`, no quotes |
-| Email signup box missing | The `PUBLIC_BUTTONDOWN_USERNAME` setting is missing (see below) |
+| Email signup box missing | The `PUBLIC_BUTTONDOWN_USERNAME` variable is missing or misspelled (repo Settings > Secrets and variables > Actions > Variables). After fixing it, run Actions > Build and deploy > Run workflow |
 | Merged but site unchanged | Wait two minutes, hard-refresh (`Cmd+Shift+R`), check the Actions tab |
 
-## Checklist: moving hosting from Vercel to GitHub Pages
+## Hosting and domain (reference)
 
-Why: Vercel's free plan only deploys changes made by its owner, so a second
-author's edits would never go live. GitHub Pages is free and deploys any
-collaborator's change. Do these once, in order:
+**Why GitHub Pages, not Vercel:** Vercel's free plan only deploys changes made by
+its owner, so a second author's edits would never go live (and can get the
+project flagged). GitHub Pages is free and publishes any collaborator's change.
+**Do not reconnect Vercel to this repo.**
 
-1. **GitHub, repo Settings > Pages:** set **Source** to **GitHub Actions**.
-2. **Settings > Secrets and variables > Actions > Variables tab > New repository
-   variable:** name `PUBLIC_BUTTONDOWN_USERNAME`, value `Advaak`.
-3. **Push** the `.github/workflows/deploy.yml` file (it's already in the repo).
-   Watch the **Actions** tab until it goes green.
-4. **Settings > Pages > Custom domain:** enter `theaawallet.com`, **Save**.
-5. **In Wix (Domains > theaawallet.com > Manage DNS Records):** delete the old
-   Vercel `A` record, add four `A` records on the root (host `@`):
-   `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`,
-   and change the `www` `CNAME` to point to `advaak.github.io`.
-6. Wait. When GitHub offers it (it can take up to 24 hours), tick
-   **Enforce HTTPS** on the Pages settings page.
-7. Once the new site is confirmed live, shut Vercel off: remove the domain from
-   the Vercel project and delete the project (or at least **Settings > Git >
-   Disconnect**).
-8. **Only now** add the other author: repo **Settings > Collaborators > Add
-   people**. Do this after step 7, not before. While Vercel is still connected,
-   his pushes would trigger Vercel deployments that its free plan blocks, and
-   Vercel can flag the project and block deploys for you too.
+How it's wired:
+- **Workflow:** `.github/workflows/deploy.yml` builds on every push and pull
+  request, and publishes only from `main`. To republish without changing any file:
+  **Actions > Build and deploy > Run workflow**.
+- **Repo Settings > Pages:** Source is **GitHub Actions**, custom domain is
+  `theaawallet.com`, and **Enforce HTTPS** is ticked.
+- **Repo Settings > Secrets and variables > Actions > Variables:**
+  `PUBLIC_BUTTONDOWN_USERNAME` = the Buttondown username (powers the email box).
+  The name and value go in their own boxes: Name `PUBLIC_BUTTONDOWN_USERNAME`,
+  Value just the username.
+- **DNS lives in Wix** (the account that bought the domain). Records on
+  `theaawallet.com`: four `A` records on `@` pointing to `185.199.108.153`,
+  `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www`
+  pointing to `advaak.github.io`. Wix does not allow custom nameservers, which is
+  why we use plain records. Leave other records alone.
+
+If the domain ever shows a security warning (certificate problem): in Settings >
+Pages, **Remove** the custom domain, retype it, **Save**, and wait. Do this once;
+each re-add restarts GitHub's timer, which can take many hours. Last time it took
+about three days to issue the first certificate.
 
 Optional: **Settings > Branches > Add rule** for `main`, requiring one approving
 review, so nothing goes live without the other author signing off.
