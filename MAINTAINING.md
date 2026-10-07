@@ -44,7 +44,7 @@ before publishing is `SPEC.md` section 9.
 - Direct, short sentences. No hedging. Never imply professional credentials.
 - Case walkthroughs keep the wrong turn in. That's the format.
 - Never edit or delete an old `statusLog` entry. Add a new dated one.
-- The other author reads every post before it goes live.
+- Tell the other author when you publish, so they can read it (SPEC section 9).
 
 ## A post file
 
@@ -118,30 +118,45 @@ that didn't work, `<Assumption>25% a year</Assumption>` to mark an assumption,
 `draft: true` hides a post from every list, but the page itself still exists if
 someone has the exact link. It is not private.
 
-## Adding a post from the browser (the review flow)
+## Adding a post from the browser
 
-This keeps the "other author reads it first" rule built in.
+Either of us can publish on our own. There is no approval step: a change you
+commit to the `main` branch goes live about two minutes later.
 
 1. Go to https://github.com/advaak/aawallet and open the folder
    (e.g. `src` > `content` > `cases`).
 2. **Add file > Create new file.** Type the file name (e.g. `consulting-ebike-sizing.mdx`)
    and paste the post.
-3. Under **Commit changes**, pick **Create a new branch for this commit and start
-   a pull request**, then **Propose changes**, then **Create pull request**.
-4. Wait about a minute for the check at the bottom of the pull request.
-   **Green** means it builds. **Red** means a formatting mistake: click
-   **Details** to read the error, fix the file (the pull request's **Files changed**
-   tab, then the `...` menu, then **Edit file**), and the check re-runs.
-5. The other author reads it and clicks **Merge pull request**. The site updates
-   about two minutes later.
+3. Scroll down to **Commit changes**, leave **Commit directly to the `main`
+   branch** selected, and click **Commit changes**.
+4. Open the **Actions** tab. A **green check** on your commit means it's live.
+   A **red X** means a formatting mistake: nothing was published and the site
+   keeps showing the last good version. Click the run, read the error, and fix
+   the file (open it, click the pencil, edit, commit again).
 
-To edit an existing post, open it, click the pencil, and use the same "new branch
-and pull request" option.
+To edit an existing post, open it, click the pencil, change it, and commit the
+same way.
 
 **Uploading a file or image:** open the folder (`public/models/` or
-`public/images/`), **Add file > Upload files**, drag it in, and commit (same
-branch choice). Then link it as `/models/yourfile.pdf` or `/images/yourimage.png`.
-Use file names with no spaces.
+`public/images/`), **Add file > Upload files**, drag it in, and commit. Then
+link it as `/models/yourfile.pdf` or `/images/yourimage.png`. Use short file
+names with no spaces, and no "Copy of" (the name ends up in the public link).
+Put files in `public/models/` or `public/images/`, not in the top `public/`
+folder.
+
+**Because there's no approval step, be careful what goes live:**
+- Keep `draft: true` while you're writing. It hides the post from every list.
+  Switch it to `false` only when the post is finished and every number is
+  checked.
+- Have your sources written down. Never publish a figure you can't back up.
+- Your SPEC (section 9) says the other author should read each post. Since
+  nothing enforces it now, tell the other author when you publish so they can
+  read it, and fix anything quickly if it's wrong.
+
+**If you ever want a second pair of eyes first,** choose **Create a new branch for
+this commit and start a pull request** in step 3 instead. The other author can
+then read it and click **Merge pull request** when it's ready. A pull request also
+gets a green or red build check before anything goes live.
 
 ## Using ChatGPT to draft a post
 
@@ -267,7 +282,7 @@ the other author's work.
 
 | Symptom | Cause / fix |
 |---|---|
-| Red X on the pull request or in Actions | Formatting mistake in the file. Open **Details**, read the error, fix the file |
+| Red X in the **Actions** tab (or on a pull request) | Formatting mistake in the file. Open the run, read the error, fix the file. The live site keeps its last good version meanwhile |
 | Error mentions a field or "expected" | A required field is missing or misspelled (e.g. no `artifacts`, wrong `direction`) |
 | Error mentions "Unexpected character" or "Could not parse" | A `{`, `}`, `<` or `>` in normal text. Rewrite that sentence |
 | Error says an author can't be found | `author:` doesn't match a file name in `src/content/authors/` |
@@ -305,8 +320,9 @@ Pages, **Remove** the custom domain, retype it, **Save**, and wait. Do this once
 each re-add restarts GitHub's timer, which can take many hours. Last time it took
 about three days to issue the first certificate.
 
-Optional: **Settings > Branches > Add rule** for `main`, requiring one approving
-review, so nothing goes live without the other author signing off.
+Publishing is deliberately open: either author can commit straight to `main`. If
+you ever want a required review, use **Settings > Rules** to require a pull
+request before merging.
 
 ## Still to do
 
